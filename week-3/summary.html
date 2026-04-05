@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Java - Week 3 Summary</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <img src="../assets/logo.png" alt="Java IIT MBS Logo" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-2/summary.html"
+                ><i class="fas fa-backward"></i> Week 2</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-4/summary.html"
+                ><i class="fas fa-forward"></i> Week 4</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero-section">
+      <div class="container content-container">
+        <div class="hero-content">
+          <div class="hero-text text-center">
+            <h1>Java - Week 3</h1>
+            <p>
+              Object-Oriented Philosophy, Inheritance, Polymorphism, and
+              Modifiers
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container content-container my-5">
+      <div class="row">
+        <div class="col-lg-3 mb-4">
+          <div class="course-nav p-3 rounded">
+            <h5 class="mb-3">Table of Contents</h5>
+            <div class="nav flex-column">
+              <a class="nav-link active" href="#oop-philosophy"
+                ><i class="fas fa-sitemap me-2"></i>OOP Philosophy</a
+              >
+              <a class="nav-link" href="#class-relationships"
+                ><i class="fas fa-project-diagram me-2"></i>Relationships</a
+              >
+              <a class="nav-link" href="#inheritance"
+                ><i class="fas fa-code-branch me-2"></i>Inheritance</a
+              >
+              <a class="nav-link" href="#static-dynamic"
+                ><i class="fas fa-bolt me-2"></i>Static & Dynamic</a
+              >
+              <a class="nav-link" href="#signatures-overloading"
+                ><i class="fas fa-random me-2"></i>Signatures</a
+              >
+              <a class="nav-link" href="#type-casting"
+                ><i class="fas fa-exchange-alt me-2"></i>Type Casting</a
+              >
+              <a class="nav-link" href="#subtyping-inheritance"
+                ><i class="fas fa-not-equal me-2"></i>Subtyping</a
+              >
+              <a class="nav-link" href="#modifiers"
+                ><i class="fas fa-shield-alt me-2"></i>Modifiers</a
+              >
+              <a class="nav-link" href="#object-class"
+                ><i class="fas fa-cube me-2"></i>Object Class</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <section id="oop-philosophy" class="mb-5">
+            <h2>
+              Philosophy of Structured programming and Object oriented
+              programming
+            </h2>
+            <p>
+              Structured programming consists of designing a set of procedures
+              (or algorithms) to solve a problem. Once the procedures are
+              determined, the next step was to find appropriate ways to store
+              the data.
+            </p>
+            <p>
+              Object-oriented programming, or OOP for short, is the dominant
+              programming paradigm. An object-oriented program is made of
+              objects. Each object has a specific functionality, exposed to its
+              users, and a hidden implementation. OOP reverses the order: puts
+              the data first, then looks at the algorithms to operate on the
+              data. For small problems, the breakdown into procedures works very
+              well. But objects are more appropriate for larger problems.
+            </p>
+
+            <div class="note-box">
+              <h5><i class="fas fa-lightbulb me-2"></i>Example</h5>
+              <p class="mb-0">
+                Consider a simple web browser. In structured programming style,
+                it might require 2,000 procedures for its implementation, all of
+                which manipulate a set of global data. In the object-oriented
+                style, there might be 100 classes with an average of 20 methods
+                per class. This structure is much easier for a programmer to
+                grasp. It is also much easier to find bugs in. Suppose the data
+                of a particular object is in an incorrect state. It is far
+                easier to search for the culprit among the 20 methods that had
+                access to that data item than among 2,000 procedures.
+              </p>
+            </div>
+
+            <h3 class="mt-4">Object oriented programming design</h3>
+            <p>
+              Structured programming start with the main function. OOP often
+              wonder where to begin, the answer is identify classes and then add
+              methods to each class.
+            </p>
+            <p>
+              For example, in an order-processing system, some of the nouns are:
+            </p>
+            <ul>
+              <li>Item</li>
+              <li>Order</li>
+              <li>Shipping address</li>
+              <li>Payment</li>
+              <li>Account</li>
+            </ul>
+            <p>
+              These nouns signify the classes <code>Item</code>,
+              <code>Order</code>, and so on.
+            </p>
+            <p>Some of the verbs are:</p>
+            <ul>
+              <li>Items are <em>added</em> to orders</li>
+              <li>Orders are <em>shipped</em> or <em>canceled</em></li>
+              <li>Payments are <em>applied</em> to orders</li>
+            </ul>
+            <p>
+              Verbs denote methods that operate on objects,
+              <code>add</code> should be the method of <code>Order</code> class
+              that takes an <code>Item</code> object as parameter.
+            </p>
+
+            <h4 class="mt-4">The key characteristics of objects are:</h4>
+            <ul>
+              <li>
+                <strong>Behavior</strong> — what methods do we need to operate
+                on objects?
+              </li>
+              <li>
+                <strong>State</strong> — how does the object react when methods
+                are invoked?
+              </li>
+              <li>
+                <strong>Identity</strong> — distinguish between different
+                objects of the same class.
+              </li>
+            </ul>
+            <p>
+              All objects that are instances of the same class share a family
+              resemblance by supporting the same behavior. State is the
+              information in the instance variables, an object’s state may
+              change over time, it must be a consequence of method calls. Each
+              object has a distinct identity. For example, in an order
+              processing system, two orders are distinct even if they request
+              identical items.
+            </p>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="class-relationships" class="mb-5">
+            <h2>Relationship between classes</h2>
+            <ul>
+              <li class="mb-3">
+                <strong>Dependence ("uses-a")</strong> — a class depends on
+                another class if its methods use or manipulate objects of that
+                class. For example, the <code>Order</code> class uses the
+                <code>Account</code> class because <code>Order</code> objects
+                need to access <code>Account</code> objects to check for credit
+                status. But the <code>Item</code> class does not depend on the
+                <code>Account</code> class, because Item objects never need to
+                worry about customer accounts.
+              </li>
+              <li class="mb-3">
+                <strong>Aggregation ("has-a")</strong> — an
+                <code>Order</code> object contains <code>Item</code> objects.
+                Containment means that objects of class A contain objects of
+                class B.
+              </li>
+              <li class="mb-3">
+                <strong>Inheritance ("is-a")</strong> — a relationship between a
+                more special and a more general class.
+              </li>
+            </ul>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="inheritance" class="mb-5">
+            <h2>Inheritance and Subclass</h2>
+            <p>
+              It is the process of reusing the properties of an existing class.
+              The class whose properties are inherited is considered as parent
+              class or super class, and the inheriting class is the child or sub
+              class.
+            </p>
+            <p>
+              A subclass extends a parent class, inherits instance variables and
+              methods from the parent class, cannot see private components of
+              parent class, can add more instance variables and methods, can
+              also override methods.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public class Employee{
+    private String name;
+    private double salary;
+    
+    // Constructor
+    public Employee(String n, double s){
+        name = n;
+        salary = s;
+    }
+    
+    // "mutator" (setters) methods
+    public void setName(String s){
+        name = s;
+    }
+    public void setSalary(double x){
+        salary = x;
+    }
+    
+    // "accessor" (getters) methods
+    public String getName(){
+        return name;
+    }
+    public double getSalary(){
+        return salary;
+    }
+    
+    // other methods
+    public double bonus(float percent){
+        return (percent/100.0)*salary;
+    }
+}</code></pre>
+            </div>
+
+            <p>
+              An <code>Employee</code> class has two private instance variables,
+              a constructor to set up the object, accessor and mutator methods
+              to set instance variables, a public method to compute bonus.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public class Manager extends Employee{
+    private String secretary;
+    
+    public Manager(String n, double s, String sn){
+        super(n,s); // super calls Employee constructor
+        secretary = sn;
+    }
+    
+    public void setSecretary(String s){
+        secretary = s;
+    }
+    public String getSecretary(){
+        return secretary;
+    }
+    
+    public double bonus(float percent){
+        return 1.5 * super.bonus(percent);
+    }
+    //this is overriding method, we can call the bonus method of parent using the keyword super
+}</code></pre>
+            </div>
+
+            <p>
+              <code>Manager</code> is a subclass of <code>Employee</code>,
+              managers are special types of employees with extra features.
+              <code>Manager</code> objects inherit fields and methods from
+              <code>Employee</code>. Every <code>Manager</code> has a name,
+              salary and methods to access and manipulate these.
+            </p>
+            <p>
+              <code>Manager</code> objects do not automatically have access to
+              private data of parent class. How can a constructor for
+              <code>Manager</code> set instance variables that are private to
+              <code>Employee</code>? The constructors for
+              <code>Manager</code> can make use of parent class’s constructor
+              using the keyword <code>super</code>.
+            </p>
+
+            <div class="note-box">
+              <h5>
+                <i class="fas fa-info-circle me-2"></i>Polymorphic Assignment
+              </h5>
+              <p class="mb-2">
+                Every Manager is an Employee, but not vice versa! We can use a
+                subclass in place of a superclass.
+              </p>
+              <div class="code-block-wrapper mb-0 mt-2">
+                <div class="code-header">
+                  <div class="code-language">
+                    <i class="fab fa-java"></i> Java
+                  </div>
+                  <button class="copy-button">
+                    <i class="fas fa-copy"></i> Copy
+                  </button>
+                </div>
+                <pre><code>Employee e = new Manager(...) //This is correct
+//But the following will not work
+Manager m = new Employee(...) //This is not correct
+
+// You basically can have
+ParentClass obj = new ChildClass(...)
+
+// but not
+ChildClass obj = new ParentClass(...)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="static-dynamic" class="mb-5">
+            <h2>Static typechecking</h2>
+            <p>
+              The variable <code>e</code> here is defined as a variable of type
+              <code>Employee</code>, therefore it can only call methods and
+              access variables which are available in the class
+              <code>Employee</code>, even though the object being referenced is
+              of type <code>Manager</code>.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>e.getSalary() //this is a CORRECT call
+e.getSecretory() //this is invalid since getSecretory() method is available in class manager</code></pre>
+            </div>
+
+            <h2 class="mt-5">Dynamic dispatch</h2>
+            <p>
+              Dynamic dispatch, also known as runtime polymorphism or
+              inheritance polymorphism, is a mechanism in Java where the
+              appropriate implementation of an overridden method is determined
+              at runtime based on the actual type of the object being
+              referenced, rather than the declared type of the reference
+              variable.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>e.bonus(0.05);</code></pre>
+            </div>
+
+            <div class="note-box">
+              <h5>
+                <i class="fas fa-exclamation-triangle me-2"></i>Compile-Time vs
+                Runtime
+              </h5>
+              <p class="mb-0">
+                Basically, at compile time, the compiler asks --
+                <em
+                  >"Do I have this method in my reference (left hand side)
+                  type?"</em
+                >
+                -- If yes, I am fine, I won't complain. But at the runtime, it
+                will call the actual (Right hand side) object's method.
+              </p>
+            </div>
+
+            <p>
+              This invokes the method <code>bonus</code> defined in the
+              <code>Manager</code> class, since the actual object in the
+              variable <code>e</code> is of type <code>Manager</code>. In case
+              of static methods, this is not true. There, the method that will
+              be called is decided based on the type of variable instead of the
+              object that is getting referenced.
+            </p>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="signatures-overloading" class="mb-5">
+            <h2>Function signatures and method overloading</h2>
+            <p>
+              Signature of a function is its name and the list of argument types
+              that it takes. It helps in uniquely identifying a method.
+            </p>
+
+            <h3 class="mt-4">Method Overloading</h3>
+            <p>
+              <strong>Method overloading</strong> is a feature that allows a
+              class to have two or more methods with the same name, but with
+              different parameters. When a method is overloaded, Java decides
+              which method to call based on the number and types of arguments
+              passed to the method.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>class A{
+  public void printName(String name){
+    System.out.println("Congratulations! "+name);
+  }
+  public void printName(String name, int age){
+    System.out.println("Congratulations! "+name+" for turning "+age);
+  }
+}
+
+public class B{
+  public static void main(String[] args){
+    A obj = new A();
+    obj.printName("Harshal");
+    //this calls the first printName method and outputs: Congratulations! Harshal
+    
+    obj.printName("Harshal", 21);
+    //this calls the second printName method and outputs: Congratulations! Harshal for turning 21
+  }
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">Method Overriding</h3>
+            <p>
+              <strong>Method overriding</strong> allows a subclass to provide a
+              specific implementation of a method that is already defined in its
+              superclass. When a method is overridden, the subclass provides a
+              new implementation for the method, and the new implementation is
+              used instead of the implementation provided by the superclass.
+              Method overriding is used to provide a different implementation of
+              a method in the subclass that is more suited to the specific needs
+              of the subclass.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>class Animal{
+  public void makeSound(){
+    System.out.println("Animal makes sound");
+  }
+}
+
+class Cat extends Animal{
+  public void makeSound(){
+    System.out.println("Cat meows");
+  }
+}
+
+public class A{
+  public static void main(String[] args){
+    Animal animal = new Animal();
+    animal.makeSound();
+    //this calls the makeSound method defined in Animal class and outputs: Animal makes sound
+    
+    Cat cat = new Cat();
+    cat.makeSound();
+    //this calls the makeSound method defined in Cat class and outputs: Cat meows
+  }
+}</code></pre>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="type-casting" class="mb-5">
+            <h2>Type Casting</h2>
+            <p>
+              Taking the previous example of <code>Employee</code> and
+              <code>Manager</code>, we can typecast the variable
+              <code>e</code> into <code>Manager</code> in order to call methods
+              only defined in <code>Manager</code> class.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>((Manager)e).getSecretory(); //this is valid</code></pre>
+            </div>
+
+            <p>
+              If <code>e</code> was not a <code>Manager</code>, this cast would
+              have thrown error, therefore it's safe to check if a variable can
+              be converted to some type before actually converting it to that
+              type. We can check this using the following code:
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>if(e instanceof Manager){
+  ((Manager)e).getSecretory();
+}
+//e instanceof Manager returns True if e is an instance of class Manager</code></pre>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="subtyping-inheritance" class="mb-5">
+            <h2>Subtyping vs Inheritance</h2>
+
+            <h3 class="mt-4">Subtyping</h3>
+            <p>
+              Capabilities of a subtype are a superset of the main type, so
+              wherever we want to use the main type, we can make use of the
+              subtype because it can perform all the functions of the main type.
+            </p>
+
+            <h3 class="mt-4">Inheritance</h3>
+            <p>
+              If class <code>Manager</code> inherits from class
+              <code>Employee</code>, it means some methods of the class
+              <code>Manager</code> are written in terms of methods of class
+              <code>Employee</code>.
+            </p>
+
+            <p>
+              Let's understand these concepts with the help of an example. The
+              following classes allows certain operations:
+            </p>
+            <ul>
+              <li><code>queue</code> - insert_rear, delete_front</li>
+              <li><code>stack</code> - insert_front, delete_front</li>
+              <li>
+                <code>deque</code> - insert_front, delete_front, insert_rear,
+                delete_rear
+              </li>
+            </ul>
+            <p>
+              Here, <code>deque</code> has more functionality than
+              <code>stack</code> or <code>queue</code>, therefore
+              <code>deque</code> is a subtype of both <code>stack</code> and
+              <code>queue</code>. Wherever there is a need of
+              <code>stack</code> or <code>queue</code>, we can use a
+              <code>deque</code> instead, since it can perform all the
+              operations from the other two.
+            </p>
+            <p>
+              We can suppress two method of <code>deque</code> and use it as
+              <code>stack</code> or <code>queue</code>, therefore stack and
+              queue both inherit from <code>deque</code>. The functionalities of
+              both <code>stack</code> and <code>queue</code> can be written in
+              terms of functionalities of <code>deque</code>.
+            </p>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="modifiers" class="mb-5">
+            <h2>Modifiers in Java</h2>
+            <p>
+              Java uses many modifiers in declarations, to cover different
+              features of object-oriented programming. These modifiers can be
+              applied to classes, instance variables and methods.
+            </p>
+
+            <h3 class="mt-4">public vs private</h3>
+            <p>
+              <strong>private</strong> modifier prevents access to a class's
+              methods or properties from any code that is outside the class
+              while <strong>public</strong> access modifier allows a code from
+              outside or inside the class to access the class's methods and
+              properties.
+            </p>
+            <p>
+              Typically, instance variables are private and methods used to
+              interact with the instance variables (accessors and mutators) are
+              public.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public class Date{
+
+  //Instance variables
+  private int year;
+  private int month;
+  private int day;
+
+  //Accessors
+  public int getYear(){
+    return year;
+  }
+  public int getMonth(){
+    return month;
+  }
+  public int getDay(){
+    return day;
+  }
+
+  //Mutators
+  public void setYear(int year){
+    this.year = year;
+  }
+  public void setMonth(int month){
+    this.month = month;
+  }
+  public void setDay(int day){
+    this.day = day;
+  }
+}</code></pre>
+            </div>
+
+            <h4 class="mt-4">Does it make sense to have private methods?</h4>
+            <p>
+              <strong>private</strong> methods are invoked internally and they
+              are not for the use of the user. For example the
+              <code>Date</code> class needs to check if a day is <= 31 before
+              storing it in the instance variable, so it can have the following
+              private method to do that.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>private boolean validDate(int date){
+  return date <= 31;
+}
+
+//The following can be a possible implementation of method setDay
+public void setDay(int day){
+  if(validDate(day)){
+    this.day = day;
+  }else{
+    System.out.println("Invalid Day");
+  }
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">static</h3>
+            <p>
+              This access modifier allows components to exist without creating
+              any objects. They are also usually <strong>public</strong>. For
+              example, a class named <code>Math</code> created for performing
+              various mathematical operations can contain variables such as
+              <code>PI</code>. For using the value of <code>PI</code> there's no
+              reason to create a new object of class <code>Math</code>.
+              Declaring this variable as static allows us to use it directly.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>System.out.println(Math.PI); //3.14...</code></pre>
+            </div>
+
+            <h3 class="mt-4">final</h3>
+            <p>
+              This modifier denotes that values cannot be updated. Let's take
+              the same example of the <code>Math</code> class. The value of
+              <code>PI</code> is a constant and we won't ever have a need to
+              change that. So it makes sense to declare the variable as final,
+              otherwise by mistake someone can end up changing the value of
+              <code>PI</code>.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>class Math{
+  public final double PI = 3.14;
+
+  public changePI(){
+    this.PI = 3.15; //Not allowed
+  }
+}</code></pre>
+            </div>
+
+            <h4 class="mt-4">Meaning of final in methods</h4>
+            <p>
+              <strong>final</strong> modifier when used in front of a method,
+              means that method can never be overridden in any of the
+              subclasses.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>class A{
+  public final void print(){
+    System.out.println("Inside class A");
+  }
+}
+
+class B extends A{
+  public void print(){
+    System.out.println("Inside class B");
+  }
+  //The above method declaration is invalid.
+}</code></pre>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="object-class" class="mb-5">
+            <h2>Object Class</h2>
+            <p>
+              In Java, <code>Object</code> is a built-in class that serves as
+              the base class for all other classes. It is the superclass of
+              every other class in Java. As a result, every Java class is either
+              a direct or an indirect subclass of the <code>Object</code> class.
+            </p>
+            <p>
+              The <code>Object</code> class provides several methods that can be
+              used by any class. We can override these methods inside a class,
+              to provide custom implementation for that particular class.
+            </p>
+            <p>
+              Example of some methods which are present in the
+              <code>Object</code> class are:
+            </p>
+
+            <ul class="list-unstyled mt-4">
+              <li class="mb-3">
+                <h5><code>equals(Object obj)</code></h5>
+                <p>
+                  This method is used to compare two objects for equality. We
+                  can override this method inside a class in order to provide
+                  custom implementation for checking equality between objects of
+                  that class. It returns <code>true</code> if the objects are
+                  equal, and <code>false</code> otherwise.
+                </p>
+              </li>
+              <li class="mb-3">
+                <h5><code>toString()</code></h5>
+                <p>
+                  This method returns a string representation of the object
+                  which gets printed, when we print the object. We can provide a
+                  specialized implementation of this method in a class to print
+                  objects of that class in a certain way.
+                </p>
+              </li>
+              <li class="mb-3">
+                <h5><code>hashCode()</code></h5>
+                <p>
+                  This method returns the hash code value for the object. It is
+                  a unique integer value generated using properties of an
+                  object.
+                </p>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container content-container">
+        <div class="row">
+          <div class="col-lg-8 mb-4">
+            <h5>Programming Concepts Using Java</h5>
+            <p>
+              An online companion for the Java programming course at IIT Madras
+              BS Degree program.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4">
+            <h5>Quick Links</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="../index.html"><i class="fas fa-home me-2"></i>Home</a>
+              </li>
+              <li>
+                <a href="../week-2/summary.html"
+                  ><i class="fas fa-backward me-2"></i>Week 2</a
+                >
+              </li>
+              <li>
+                <a href="../week-4/summary.html"
+                  ><i class="fas fa-forward me-2"></i>Week 4</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="text-center">
+          <p class="mb-0">
+            &copy; 2026 IIT Madras BS Degree Program. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/codeblocks.js"></script>
+  </body>
+</html>
