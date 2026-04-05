@@ -1,0 +1,2282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Java - Week 6 Summary</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <img src="../assets/logo.png" alt="Java IIT MBS Logo" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-5/summary.html"
+                ><i class="fas fa-backward"></i> Week 5</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-7/summary.html"
+                ><i class="fas fa-forward"></i> Week 7</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero-section">
+      <div class="container content-container">
+        <div class="hero-content">
+          <div class="hero-text text-center">
+            <h1>Java - Week 6</h1>
+            <p>
+              Collections Framework, Interfaces, Iterators, Lists, Sets, Queues,
+              and Maps
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container content-container my-5">
+      <div class="row">
+        <div class="col-lg-3 mb-4">
+          <div class="course-nav p-3 rounded">
+            <h5 class="mb-3">Table of Contents</h5>
+            <div class="nav flex-column">
+              <a class="nav-link active" href="#indirection"
+                ><i class="fas fa-route me-2"></i>Indirection</a
+              >
+              <a class="nav-link" href="#collections-framework"
+                ><i class="fas fa-layer-group me-2"></i>Collections Framework</a
+              >
+              <a class="nav-link" href="#iterator"
+                ><i class="fas fa-sync-alt me-2"></i>Iterator Interface</a
+              >
+              <a class="nav-link" href="#concrete-collections"
+                ><i class="fas fa-shapes me-2"></i>Concrete Collections</a
+              >
+              <a class="nav-link" href="#list-interface"
+                ><i class="fas fa-list-ol me-2"></i>List Interface</a
+              >
+              <a class="nav-link" href="#set-interface"
+                ><i class="fas fa-object-ungroup me-2"></i>Set Interface</a
+              >
+              <a class="nav-link" href="#queue-interface"
+                ><i class="fas fa-tasks me-2"></i>Queue Interface</a
+              >
+              <a class="nav-link" href="#maps"
+                ><i class="fas fa-map me-2"></i>Maps</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <section id="indirection" class="mb-5">
+            <h2>
+              The Benefits of Indirection - Separating Interface from
+              Implementation
+            </h2>
+            <p>
+              Abstract Data Types (ADTs) separate the public interface from
+              private implementation, promoting reusability. For example, a
+              generic <strong>Queue</strong> typically includes methods like:
+            </p>
+            <ul>
+              <li><code>add(element)</code>: Adds an element to the queue.</li>
+              <li><code>remove()</code>: Removes an element.</li>
+              <li><code>size()</code>: Returns the queue size.</li>
+            </ul>
+            <p>Common implementations include:</p>
+            <ul>
+              <li>
+                <strong>Circular Array</strong>: Fixed-size array where elements
+                wrap around when reaching the end.
+              </li>
+              <li>
+                <strong>Linked List</strong>: Dynamic structure where each node
+                links to the next.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Trade-offs Between Implementations</h3>
+            <ul>
+              <li>
+                <strong>Circular Array:</strong>
+                <ul>
+                  <li>Efficient due to fixed storage.</li>
+                  <li>Limited by initial size.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Linked List:</strong>
+                <ul>
+                  <li>Flexible and grows dynamically.</li>
+                  <li>Higher memory overhead.</li>
+                </ul>
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Multiple Implementations</h3>
+            <p>
+              Developers may offer separate implementations to suit various
+              needs:
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>CircularArrayQueue&lt;Date&gt; dateQueue = new CircularArrayQueue&lt;&gt;();
+LinkedListQueue&lt;String&gt; stringQueue = new LinkedListQueue&lt;&gt;();</code></pre>
+            </div>
+
+            <p>
+              However, changing <code>dateQueue</code> to a flexible type
+              requires updating all references in the code, which can be
+              error-prone.
+            </p>
+
+            <h3 class="mt-4">Using Interfaces for Flexibility</h3>
+            <p>
+              Using an interface abstracts implementation details and improves
+              flexibility:
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public interface Queue&lt;E&gt; {
+    void add(E element);
+    E remove();
+    int size();
+}
+public class CircularArrayQueue&lt;E&gt; implements Queue&lt;E&gt; {
+    public void add(E element) { /* Implementation */ }
+    public E remove() { /* Implementation */ }
+    public int size() { /* Implementation */ }
+}
+public class LinkedListQueue&lt;E&gt; implements Queue&lt;E&gt; {
+    public void add(E element) { /* Implementation */ }
+    public E remove() { /* Implementation */ }
+    public int size() { /* Implementation */ }
+}</code></pre>
+            </div>
+
+            <p>
+              Declare variables using the interface, deferring implementation
+              decisions to instantiation:
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Queue&lt;Date&gt; dateQueue = new CircularArrayQueue&lt;&gt;();
+Queue&lt;String&gt; stringQueue = new LinkedListQueue&lt;&gt;();</code></pre>
+            </div>
+
+            <p>
+              Here, Switching implementations require only updating the
+              instantiation as compared to previous implementation.
+            </p>
+
+            <h3 class="mt-4">Real-Life Analogy</h3>
+            <p>An organization providing office cars to staff can:</p>
+            <ul>
+              <li>
+                <strong>Concrete</strong>: Assign specific cars to individuals
+                (rigid and inflexible).
+              </li>
+              <li>
+                <strong>Indirection</strong>: Maintain a car pool or contract
+                taxis, offering flexibility regardless of specific vehicle
+                issues.
+              </li>
+            </ul>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="collections-framework" class="mb-5">
+            <h2>Collections in Programming Languages</h2>
+            <p>
+              Many programming languages provide built-in data structures for
+              managing grouped data, such as arrays, lists, dictionaries, and
+              sets. In Python, these structures are well-integrated into the
+              language. Similarly, Java offers a variety of data structures,
+              which have evolved significantly over time.
+            </p>
+
+            <h3 class="mt-4">Early Data Structures in Java</h3>
+            <p>
+              When Java was first introduced, it came with several standalone
+              data structures that were widely useful. These included:
+            </p>
+            <ul>
+              <li>Vector</li>
+              <li>Stack</li>
+              <li>Hashtable</li>
+              <li>BitSet</li>
+            </ul>
+
+            <p>
+              However, these early data structures lacked a unified framework.
+              This absence of a common interface led to several challenges:
+            </p>
+            <ol>
+              <li>
+                <strong>Code Maintenance</strong>: Switching from one data
+                structure to another often required substantial changes
+                throughout the codebase.
+              </li>
+              <li>
+                <strong>Inconsistency</strong>: Each data structure had its own
+                methods, syntax, and constructors, with no standardization.
+              </li>
+              <li>
+                <strong>Usability Issues</strong>: Developers had to remember
+                the unique functionalities of each collection, making it harder
+                to achieve consistency and reusability in their code.
+              </li>
+            </ol>
+            <p>
+              The fragmented nature of these collections underscored the need
+              for a unified framework to standardize collection operations,
+              improve usability, and promote code reusability.
+            </p>
+
+            <h3 class="mt-5">The <code>Collection</code> interface</h3>
+            <p>
+              To address these issues, Java introduced the Collection Framework,
+              a unified architecture for working with data structures. This
+              framework provides:
+            </p>
+            <ul>
+              <li>
+                <strong>Abstraction</strong>: Common behaviors of grouped data
+                are abstracted through interfaces.
+              </li>
+              <li>
+                <strong>Standardization</strong>: A consistent and predictable
+                API for working with collections.
+              </li>
+              <li>
+                <strong>Extensibility</strong>: The ability to add custom
+                implementations with minimal effort.
+              </li>
+            </ul>
+
+            <h4 class="mt-4">Key Interfaces in the Collection Framework</h4>
+            <p>The framework revolves around several core interfaces:</p>
+            <ol>
+              <li>
+                <strong>Collection</strong>: The root interface for all
+                non-key-value data structures.
+              </li>
+              <li>
+                <strong>List</strong>: Represents an ordered collection.<br />
+                <em>Examples:</em> <code>ArrayList</code>,
+                <code>LinkedList</code>
+              </li>
+              <li>
+                <strong>Set</strong>: Represents a collection with unique
+                elements.<br />
+                <em>Examples:</em> <code>HashSet</code>,
+                <code>LinkedHashSet</code>
+              </li>
+              <li>
+                <strong>Queue</strong>: Represents a collection designed for
+                holding elements prior to processing.<br />
+                <em>Examples:</em> <code>PriorityQueue</code>
+              </li>
+            </ol>
+            <p>
+              Each interface defines specific behaviors and is implemented by
+              concrete classes.
+            </p>
+
+            <h4 class="mt-4">Methods in Collection interface</h4>
+            <p>
+              The Collection interface provides a variety of methods to perform
+              common operations:
+            </p>
+            <ul>
+              <li>
+                <strong>Adding Elements:</strong>
+                <ul>
+                  <li>
+                    <code>public boolean add(E e)</code> - Inserts an element
+                    into the collection.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>Iteration:</strong>
+                <ul>
+                  <li>
+                    <code>Iterator&lt;E&gt; iterator()</code> - Returns an
+                    iterator to traverse the collection.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>Size and Emptiness:</strong>
+                <ul>
+                  <li>
+                    <code>int size()</code> - Returns the number of elements in
+                    the collection.
+                  </li>
+                  <li>
+                    <code>boolean isEmpty()</code> - Checks if the collection is
+                    empty.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>Containment Checks:</strong>
+                <ul>
+                  <li>
+                    <code>boolean contains(Object obj)</code> - Checks if the
+                    collection contains a specified element.
+                  </li>
+                  <li>
+                    <code>boolean containsAll(Collection&lt;?&gt; c)</code> -
+                    Checks if the collection contains all elements of another
+                    collection.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>Equality and Additions:</strong>
+                <ul>
+                  <li>
+                    <code>boolean equals(Object other)</code> - Compares the
+                    collection with another object for equality.
+                  </li>
+                  <li>
+                    <code
+                      >boolean addAll(Collection&lt;? extends E&gt; from)</code
+                    >
+                    - Adds all elements from another collection.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>Removing Elements:</strong>
+                <ul>
+                  <li>
+                    <code>boolean remove(Object obj)</code> - Removes a
+                    specified element.
+                  </li>
+                  <li>
+                    <code>boolean removeAll(Collection&lt;?&gt; c)</code> -
+                    Removes all elements contained in another collection.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+            <p>
+              While these methods offer extensive functionality, implementing
+              all of them in a concrete collection class can be labor-intensive.
+            </p>
+            <p>
+              The ideal solution might be to provide default implementations in
+              the interface but this feature (of providing default
+              implementations in interface) was added to JAVA later.
+            </p>
+            <p>
+              The other way is to provide concrete implementations through an
+              abstract class.
+            </p>
+
+            <h4 class="mt-4">Abstract Implementations</h4>
+            <p>
+              To simplify implementation, Java provides the
+              <code>AbstractCollection</code> class, which implements the
+              <code>Collection</code> interface. This abstract class offers
+              default implementations for many methods, allowing developers to
+              focus on specific behaviors for their custom collections.
+            </p>
+            <p>
+              In this abstract class some implementations remain abstract while
+              others can be extended.
+            </p>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="iterator" class="mb-5">
+            <h2>The <code>Iterator</code> Interface</h2>
+            <p>
+              The <code>Iterator</code> interface, located above
+              <code>Collection</code> in the hierarchy, facilitates systematic
+              traversal of collections. Its primary methods include:
+            </p>
+            <ul>
+              <li>
+                <code>public boolean hasNext()</code> - Checks if there are more
+                elements to iterate over.
+              </li>
+              <li>
+                <code>public E next()</code> - Returns the next element in the
+                iteration.
+              </li>
+              <li>
+                <code>public void remove()</code> - Removes the last element
+                accessed by the iterator.
+              </li>
+            </ul>
+            <p>
+              The iterator's <code>remove()</code> method is distinct from the
+              Collection interface's <code>remove()</code> method. While the
+              former removes the current element accessed via
+              <code>next()</code>, the latter removes a specified object
+              directly from the collection.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+public class BasicIteratorExample {
+    public static void main(String[] args) {
+
+        // Create a collection of strings
+        Collection&lt;String&gt; words = new ArrayList&lt;&gt;();
+
+        // Add elements to the collection
+        words.add("Hello");
+        words.add("World");
+        words.add("Welcome");
+        words.add("To");
+        words.add("Java");
+
+        // Create an Iterator to traverse the collection
+        Iterator&lt;String&gt; iterator = words.iterator();
+
+        System.out.println("Iterating over the collection:");
+        // Use the Iterator to traverse and print each element
+        while (iterator.hasNext()) {
+            String word = iterator.next();
+            System.out.println(word); // Print each element
+        }
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Iterating over the collection:
+Hello
+World
+Welcome
+To
+Java</code></pre>
+            <ul>
+              <li>
+                The <code>hasNext()</code> method checks if there are more
+                elements to iterate over.
+              </li>
+              <li>
+                The <code>next()</code> method retrieves the next element in the
+                collection.
+              </li>
+            </ul>
+
+            <h4 class="mt-4">Enhanced <code>for</code> Loop (For-Each Loop)</h4>
+            <p>
+              Java introduced the enhanced <code>for</code> loop, which
+              simplifies iteration by implicitly using an iterator. This feature
+              reduces boilerplate code and improves readability.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.ArrayList;
+import java.util.Collection;
+public class EnhancedForLoopExample {
+    public static void main(String[] args) {
+
+        // Create a collection of strings
+        Collection&lt;String&gt; words = new ArrayList&lt;&gt;();
+
+        // Add elements to the collection
+        words.add("Hello");
+        words.add("World");
+        words.add("Welcome");
+        words.add("To");
+        words.add("Java");
+
+        System.out.println("Using enhanced for loop:");
+        // Use enhanced for loop to iterate over the collection
+        for (String word : words) {
+            System.out.println(word); // Print each element
+        }
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Using enhanced for loop:
+Hello
+World
+Welcome
+To
+Java</code></pre>
+            <ul>
+              <li>
+                The enhanced for loop simplifies iteration and implicitly uses
+                an <code>Iterator</code>.
+              </li>
+            </ul>
+            <p>
+              Since having iterator functionality also provides flexibility to
+              write generic functions to operate on collections.
+            </p>
+
+            <h4 class="mt-4">Removing elements from Iterator</h4>
+            <p>
+              The <code>remove()</code> method of the Iterator interface has
+              specific behavior:
+            </p>
+            <ul>
+              <li>
+                It removes the last element accessed by <code>next()</code>.
+              </li>
+              <li>
+                Consecutive calls to <code>remove()</code> require an
+                intermediate call to <code>next()</code>. Failing to do so
+                results in an <code>IllegalStateException</code>, as there is no
+                "current element" to remove after the first
+                <code>remove()</code> call.
+              </li>
+            </ul>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+public class IteratorRemoveExample {
+    public static void main(String[] args) {
+
+        // Create a collection of strings
+        Collection&lt;String&gt; words = new ArrayList&lt;&gt;();
+        // Add elements to the collection
+        words.add("Hello");
+        words.add("World");
+        words.add("Welcome");
+        words.add("To");
+        words.add("Java");
+
+        // Create an Iterator to traverse the collection
+        Iterator&lt;String&gt; iterator = words.iterator();
+        System.out.println("Original collection:");
+        for (String word : words) {
+            System.out.println(word);
+        }
+
+        System.out.println("\nRemoving elements starting with 'W':"); // Use the Iterator to remove elements
+
+        while (iterator.hasNext()) {
+            String word = iterator.next();
+            if (word.startsWith("W") || word.startsWith("w")) {
+                iterator.remove();
+                System.out.println("Removed: " + word);
+            }
+        }
+
+        System.out.println("\nUpdated collection:");
+        for (String word : words) {
+            System.out.println(word);
+        }
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Original collection:
+Hello
+World
+Welcome
+To
+Java
+
+Removing elements starting with 'W':
+Removed: World
+Removed: Welcome
+
+Updated collection:
+Hello
+To
+Java</code></pre>
+            <ul>
+              <li>
+                The <code>remove()</code> method removes the last element
+                returned by <code>next()</code>.
+              </li>
+              <li>
+                Calling <code>remove()</code> directly without invoking
+                <code>next()</code> leads to an
+                <code>IllegalStateException</code>.
+              </li>
+            </ul>
+
+            <h4 class="mt-4">
+              Implications of Using <code>Iterator.remove()</code>
+            </h4>
+            <p>
+              The <code>remove()</code> method of the
+              <code>Iterator</code> interface has specific implications when
+              attempting to remove consecutive elements from a collection. To
+              achieve this, you must interleave calls to the
+              <code>next()</code> method between successive
+              <code>remove()</code> calls.
+            </p>
+            <p>
+              For example, if you need to remove two consecutive elements from a
+              collection, you cannot directly call <code>remove()</code> twice
+              in succession. The first <code>remove()</code> call removes the
+              last element returned by <code>next()</code>. If you attempt a
+              second <code>remove()</code> call without invoking
+              <code>next()</code>, it results in an error because there is no
+              "current element" for the iterator to act upon. The absence of an
+              intermediate <code>next()</code> leaves the iterator in an invalid
+              state.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+public class ConsecutiveRemoveExample {
+    public static void main(String[] args) {
+
+        // Create a collection of strings
+        Collection&lt;String&gt; words = new ArrayList&lt;&gt;();
+
+        // Add elements to the collection
+        words.add("Hello");
+        words.add("World");
+        words.add("Welcome");
+
+        // Create an Iterator to traverse the collection
+        Iterator&lt;String&gt; iterator = words.iterator();
+        System.out.println("Attempting consecutive remove calls:");
+
+        try {
+            while (iterator.hasNext()) {
+            String word = iterator.next();
+
+            if (word.startsWith("W") || word.startsWith("w")) {
+                iterator.remove(); // First remove call
+                iterator.remove(); // Second remove call (ERROR)
+                System.out.println("Removed: " + word);
+                }
+            }
+
+        } catch (IllegalStateException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Attempting consecutive remove calls:
+Error: null</code></pre>
+            <ul>
+              <li>
+                After calling <code>remove()</code>, the iterator's state
+                requires an intermediate <code>next()</code> call to establish a
+                "current element" before another <code>remove()</code>.
+              </li>
+            </ul>
+
+            <div class="note-box mt-4">
+              <h5>
+                <i class="fas fa-exclamation-triangle me-2"></i>Distinction
+                Between <code>remove()</code> in Iterator and Collection
+              </h5>
+              <p class="mb-2">
+                It is important to note that the <code>remove()</code> method in
+                the <code>Iterator</code> interface is distinct from the
+                <code>remove()</code> method in the
+                <code>Collection</code> interface, differing in both their
+                signatures and behaviors:
+              </p>
+              <ol class="mb-0">
+                <li>
+                  <strong><code>Iterator.remove()</code></strong>
+                  <ul>
+                    <li>
+                      <strong>Signature</strong>: <code>void remove()</code>
+                    </li>
+                    <li>
+                      <strong>Behavior</strong>: Removes the last element
+                      returned by the <code>next()</code> method. It operates on
+                      the current position of the iterator within the
+                      collection.
+                    </li>
+                  </ul>
+                </li>
+                <li class="mt-2">
+                  <strong><code>Collection.remove()</code></strong>
+                  <ul>
+                    <li>
+                      <strong>Signature</strong>:
+                      <code>boolean remove(Object obj)</code>
+                    </li>
+                    <li>
+                      <strong>Behavior</strong>: Removes a specified object from
+                      the collection. If the object exists within the
+                      collection, it is removed, and the method returns true;
+                      otherwise, it returns false.
+                    </li>
+                  </ul>
+                </li>
+              </ol>
+              <p class="mt-2 mb-0">
+                The <code>Iterator.remove()</code> method focuses on the element
+                currently being traversed by the iterator, while the
+                <code>Collection.remove()</code> method is used to directly
+                target a specific object in the collection, independent of
+                iteration.
+              </p>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="concrete-collections" class="mb-5">
+            <h2>Concrete Collections</h2>
+            <p>
+              Collections are further organized based on additional properties.
+              These captured by interfaces:
+            </p>
+            <ul>
+              <li>
+                <strong>Interface List</strong> - For ordered collections.
+              </li>
+              <li>
+                <strong>Interface Set</strong> - For collection without
+                duplicates.
+              </li>
+              <li>
+                <strong>Interface Queue</strong> - For ordered collections with
+                constraints on addition and deletion.
+              </li>
+            </ul>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="list-interface" class="mb-5">
+            <h2>
+              The <code>List</code> Interface - Ordered Collections in Java
+            </h2>
+
+            <h3 class="mt-4">Accessing Elements in Ordered Collections</h3>
+            <p>An ordered collection can be accessed in two primary ways:</p>
+            <ol>
+              <li>
+                <strong>Through an Iterator</strong>: Traverses the collection
+                sequentially.
+              </li>
+              <li>
+                <strong>By Position (Random Access)</strong>: Directly retrieves
+                or manipulates an element at a specified index.
+              </li>
+            </ol>
+
+            <h3 class="mt-4">Additional Functions for Random Access</h3>
+            <p>
+              The <code>ListIterator</code> interface, which extends
+              <code>Iterator</code>, provides additional functionalities
+              specific to ordered collections:
+            </p>
+            <ul>
+              <li>
+                <code>void add(E element)</code>: Inserts an element before the
+                current index.
+              </li>
+              <li>
+                <code>void previous()</code>: Moves to the previous element in
+                the sequence.
+              </li>
+              <li>
+                <code>boolean hasPrevious()</code>: Checks if there are elements
+                before the current position.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">The List Interface and Random Access</h3>
+            <p>
+              The <code>List</code> interface in Java supports both sequential
+              and random access. However, the efficiency of random access varies
+              depending on the implementation:
+            </p>
+            <ul>
+              <li>
+                <strong>Array-based Implementations</strong>: Compute the
+                location of an element at index <code>i</code> using arithmetic
+                operations. This makes random access efficient.
+              </li>
+              <li>
+                <strong>Linked List Implementations</strong>: Require traversal
+                of <code>i</code> links to reach the ith element, which makes
+                random access less efficient.
+              </li>
+            </ul>
+
+            <p>
+              The <code>List</code> interface includes the following methods for
+              random access:
+            </p>
+            <ul>
+              <li>
+                <code>void add(int index, E element)</code> - Inserts the
+                specified element at the specified position in this list.
+              </li>
+              <li>
+                <code>E get(int index)</code> - Returns the element at the
+                specified position in this list.
+              </li>
+              <li>
+                <code>ListIterator&lt;E&gt; listIterator()</code> - Returns a
+                list iterator over the elements in this list (in proper
+                sequence), starting at the specified position in the list.
+              </li>
+              <li>
+                <code>void remove(int index)</code> - Removes the element at the
+                specified position in this list.
+              </li>
+              <li>
+                <code>E set(int index, E element)</code> - Replaces the element
+                at the specified position in this list with the specified
+                element.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">
+              The Tagging Interface <code>RandomAccess</code>
+            </h3>
+            <p>
+              The <code>RandomAccess</code> interface is a marker interface used
+              to indicate that a List supports efficient random access.
+              Algorithms can adapt their strategy based on whether a list
+              implements <code>RandomAccess</code>.
+            </p>
+            <p>
+              For instance, swapping two elements in a list can be optimized if
+              the list supports efficient random access:
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>if (list instanceof RandomAccess) {
+    // Efficient random access strategy
+} else {
+    // Sequential access strategy
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">Abstract Implementations of the List Interface</h3>
+            <p>
+              Java provides abstract classes to simplify the implementation of
+              the <code>List</code> interface:
+            </p>
+            <ol>
+              <li>
+                <code>AbstractList</code>:
+                <ul>
+                  <li>Extends <code>AbstractCollection</code>.</li>
+                  <li>
+                    Provides default implementations for
+                    <code>List</code> methods.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <code>AbstractSequentialList</code>:
+                <ul>
+                  <li>Extends <code>AbstractList</code>.</li>
+                  <li>
+                    Specifically for lists that do not support random access.
+                  </li>
+                </ul>
+              </li>
+            </ol>
+
+            <h3 class="mt-4">Concrete Implementations of Lists</h3>
+            <ul>
+              <li>
+                <code>LinkedList&lt;E&gt;</code>
+                <ul>
+                  <li>Extends <code>AbstractSequentialList</code>.</li>
+                  <li>Internal Structure: A doubly linked list.</li>
+                  <li>
+                    Characteristics:
+                    <ul>
+                      <li>
+                        Efficient for inserting and removing elements at
+                        arbitrary positions.
+                      </li>
+                      <li>
+                        Inefficient for random access due to traversal
+                        requirements.
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <code>ArrayList&lt;E&gt;</code>
+                <ul>
+                  <li>Extends <code>AbstractList</code>.</li>
+                  <li>Internal Structure: A dynamically resizable array.</li>
+                  <li>
+                    Characteristics:
+                    <ul>
+                      <li>Supports efficient random access.</li>
+                      <li>
+                        Handles dynamic resizing by allocating larger arrays as
+                        needed.
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Practical Considerations</h3>
+
+            <h4 class="mt-3">Using Random Access Methods</h4>
+            <p>
+              While the <code>List</code> interface guarantees the availability
+              of random access methods like <code>get(int index)</code>, their
+              efficiency depends on the underlying implementation:
+            </p>
+            <ul>
+              <li><strong>ArrayList</strong>: Efficient.</li>
+              <li>
+                <strong>LinkedList</strong>: Each <code>get()</code> call may
+                require traversal from the beginning, leading to poor
+                performance in loops.
+              </li>
+            </ul>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+public class ListAccessExample {
+    public static void main(String[] args) {
+
+        // ArrayList: Supports efficient random access
+        List&lt;String&gt; arrayList = new ArrayList&lt;&gt;();
+
+        arrayList.add("Java");
+        arrayList.add("Python");
+        arrayList.add("C++");
+
+        // LinkedList: Inefficient random access
+        List&lt;String&gt; linkedList = new LinkedList&lt;&gt;(arrayList);
+        System.out.println("Accessing elements by index (ArrayList):");
+
+        for (int i = 0; i &lt; arrayList.size(); i++) {
+            System.out.println("Index " + i + ": " + arrayList.get(i));
+        }
+
+        System.out.println("\nAccessing elements by index (LinkedList):");
+
+        for (int i = 0; i &lt; linkedList.size(); i++) {
+            System.out.println("Index " + i + ": " + linkedList.get(i)); // Traverses for each call
+        }
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Accessing elements by index (ArrayList):
+Index 0: Java
+Index 1: Python
+Index 2: C++
+
+Accessing elements by index (LinkedList):
+Index 0: Java
+Index 1: Python
+Index 2: C++</code></pre>
+            <ul>
+              <li>
+                <strong>ArrayList</strong> provides efficient random access
+                using arithmetic operations.
+              </li>
+              <li>
+                <strong>LinkedList</strong> requires traversal for each
+                <code>get()</code> call, which is less efficient.
+              </li>
+            </ul>
+
+            <h4 class="mt-4">Differentiating <code>add()</code> Methods</h4>
+            <p>
+              The <code>add()</code> method behaves differently depending on the
+              context:
+            </p>
+            <ol>
+              <li>
+                In <code>Collection</code>:
+                <ul>
+                  <li>Appends an element to the end of the collection.</li>
+                  <li>Returns a boolean indicating success.</li>
+                </ul>
+              </li>
+              <li>
+                In <code>ListIterator</code>:
+                <ul>
+                  <li>Inserts an element before the current position.</li>
+                  <li>Returns void as insertion always succeeds.</li>
+                </ul>
+              </li>
+            </ol>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+public class AddMethodExample {
+    public static void main(String[] args) {
+
+    // Using the List's add method
+    List&lt;String&gt; list = new ArrayList&lt;&gt;();
+    list.add("End"); // Appends to the end
+
+    System.out.println("List after appending: " + list);
+
+
+    // Using the ListIterator's add method
+    ListIterator&lt;String&gt; iterator = list.listIterator();
+    iterator.add("Insert"); // Inserts before the current position
+    System.out.println("List after inserting: " + list);
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>List after appending: [End]
+List after inserting: [Insert, End]</code></pre>
+            <ul>
+              <li>
+                <code>list.add(E element)</code> appends elements to the end.
+              </li>
+              <li>
+                <code>iterator.add(E element)</code> inserts elements before the
+                current iterator position.
+              </li>
+            </ul>
+
+            <div class="note-box mt-4">
+              <h5>
+                <i class="fas fa-list me-2"></i>Summary - The
+                <code>List</code> Interface
+              </h5>
+              <p class="mb-0">
+                The <code>List</code> interface provides versatile mechanisms
+                for managing ordered collections. Understanding the
+                characteristics and performance implications of specific
+                implementations like <code>LinkedList</code> and
+                <code>ArrayList</code> is crucial for effective use.
+                Additionally, the <code>ListIterator</code> interface extends
+                functionality for navigating and modifying lists, while the
+                <code>RandomAccess</code> marker interface informs the
+                efficiency of direct access operations.
+              </p>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="set-interface" class="mb-5">
+            <h2>The <code>Set</code> Interface</h2>
+            <p>
+              A <code>Set</code> in Java is a collection that ensures
+              <strong>no duplicate elements</strong>. While the
+              <code>Set</code> interface shares the same method signatures as
+              the Collection interface, its behavior is more constrained:
+            </p>
+            <ul>
+              <li>
+                <code>add(E element)</code>: Adds an element to the set. If the
+                element already exists, the operation has no effect and returns
+                <code>false</code>.
+              </li>
+              <li>
+                <code>equals(Object o)</code>: Determines equality by comparing
+                contents without considering the order.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Purpose of the <code>Set</code> Interface</h3>
+            <p>
+              The existence of the <code>Set</code> interface alongside
+              <code>Collection</code>, despite their shared methods, is to
+              enforce additional constraints. By explicitly requiring a
+              <code>Set</code>, programmers can ensure:
+            </p>
+            <ul>
+              <li>No duplicate elements.</li>
+              <li>Efficient membership checks.</li>
+            </ul>
+
+            <h3 class="mt-4">Efficient Membership Tests in Sets</h3>
+            <p>
+              Unlike ordered collections that require iteration to locate an
+              element, sets optimize membership testing by:
+            </p>
+            <ol>
+              <li>
+                <strong>Hashing</strong>: Mapping values to positions using a
+                <strong>hash function</strong>.
+              </li>
+              <li>
+                <strong>Balanced Search Trees</strong>: Structuring values in a
+                hierarchical manner for efficient lookup.
+              </li>
+            </ol>
+
+            <h3 class="mt-4">AbstractSet and Concrete Implementations</h3>
+            <p>
+              The <code>AbstractSet</code> class provides default
+              implementations for many <code>Set</code> methods. Concrete
+              implementations of <code>Set</code> extend
+              <code>AbstractSet</code> and offer optimized storage and retrieval
+              mechanisms. As similar to the
+              <code>AbstractCollection</code> class for
+              <code>Collection</code> interface.
+            </p>
+
+            <h3 class="mt-4">Concrete Implementations of Sets</h3>
+
+            <h4 class="mt-3">1. <code>HashSet</code></h4>
+            <p>The <code>HashSet</code> class uses a hash table for storage.</p>
+            <ul>
+              <li>
+                <strong>Underlying Structure</strong>: An array where values are
+                mapped to positions using a hash function h(v).
+              </li>
+              <li>
+                <strong>Handling Collisions</strong>: If two values map to the
+                same position, the collision is resolved using strategies like
+                probing or chaining.
+              </li>
+              <li>
+                <strong>Membership Testing</strong>: Fast. The hash function
+                determines the position, and membership is checked directly.
+              </li>
+              <li>
+                <strong>Order</strong>: Unordered. The iterator visits elements
+                in an arbitrary order but guarantees that each element is
+                visited exactly once.
+              </li>
+            </ul>
+
+            <p>
+              <strong>Code Example:</strong> Adding Elements and Ensuring
+              Uniqueness
+            </p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.HashSet;
+import java.util.Set;
+public class SetExample {
+    public static void main(String[] args) {
+
+        // Create a HashSet
+        Set&lt;String&gt; set = new HashSet&lt;&gt;();
+
+        // Add elements to the set
+        set.add("Java");
+        set.add("Python");
+        set.add("C++");
+        set.add("Java"); // Duplicate element
+
+        // Print the set
+        System.out.println("Set contents: " + set);
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Set contents: [Java, Python, C++]</code></pre>
+            <ul>
+              <li>
+                <strong>No Duplicates</strong>: Adding "Java" twice results in
+                only one instance in the set.
+              </li>
+              <li>
+                <strong>Order Not Guaranteed</strong>: The order of elements in
+                a HashSet is arbitrary.
+              </li>
+            </ul>
+
+            <p>
+              <strong>Code Example:</strong> Membership Testing with
+              <code>HashSet</code>
+            </p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.HashSet;
+import java.util.Set;
+public class HashSetMembership {
+    public static void main(String[] args) {
+
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        set.add(5);
+        set.add(10);
+        set.add(15);
+
+        // Membership test
+        System.out.println("Set contains 10: " + set.contains(10)); // True
+        System.out.println("Set contains 20: " + set.contains(20)); // False
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Set contains 10: true
+Set contains 20: false</code></pre>
+            <ul>
+              <li>
+                <strong>Efficient Membership Testing</strong>: Hashing allows
+                constant-time complexity for <code>contains</code>.
+              </li>
+            </ul>
+
+            <h4 class="mt-4">2. <code>TreeSet</code></h4>
+            <p>
+              The <code>TreeSet</code> class uses a
+              <strong>balanced search tree</strong> to store elements.
+            </p>
+            <ul>
+              <li>
+                <strong>Underlying Structure</strong>: A binary search tree that
+                maintains elements in sorted order.
+              </li>
+              <li>
+                <strong>Membership Testing</strong>: Efficient, with a time
+                complexity <code>O(log n)</code> of for <code>n</code> elements.
+              </li>
+              <li>
+                <strong>Order:</strong> Sorted. The iterator visits elements in
+                ascending order.
+              </li>
+              <li>
+                <strong>Use Case</strong>: When an ordered set is required.
+              </li>
+            </ul>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.TreeSet;
+public class TreeSetExample {
+    public static void main(String[] args) {
+
+        TreeSet&lt;Integer&gt; treeSet = new TreeSet&lt;&gt;();
+
+        // Add elements
+        treeSet.add(20);
+        treeSet.add(10);
+        treeSet.add(30);
+
+        // Print elements in sorted order
+        System.out.println("TreeSet contents (sorted): " + treeSet);
+
+        // Membership test
+        System.out.println("TreeSet contains 20: " + treeSet.contains(20));
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>TreeSet contents (sorted): [10, 20, 30]
+TreeSet contains 20: true</code></pre>
+            <ul>
+              <li>
+                <strong>Sorted Order</strong>: Elements are stored in ascending
+                order using a balanced binary search tree.
+              </li>
+              <li>
+                <strong>Efficient Membership Testing</strong>: The
+                <code>TreeSet</code> provides <code>O(log n)</code> complexity
+                for lookup operations.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Summary - The <code>Set</code> Interface</h3>
+            <p>
+              The <code>Set</code> interface in Java provides a powerful
+              abstraction for collections without duplicates. While
+              <code>HashSet</code> is optimized for fast membership testing and
+              insertion, <code>TreeSet</code> is suited for scenarios requiring
+              sorted order. Understanding the trade-offs between these
+              implementations is essential for writing efficient and effective
+              code.
+            </p>
+
+            <div class="table-responsive mt-4">
+              <table class="table text-light table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Implementation</th>
+                    <th>Underlying Structure</th>
+                    <th>Order</th>
+                    <th>Membership Test Complexity</th>
+                    <th>Use Case</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>HashSet</code></td>
+                    <td>Hash Table</td>
+                    <td>Unordered</td>
+                    <td><code>O(1)</code></td>
+                    <td>Fast membership testing and insertion.</td>
+                  </tr>
+                  <tr>
+                    <td><code>TreeSet</code></td>
+                    <td>Balanced Binary Search Tree</td>
+                    <td>Sorted (natural)</td>
+                    <td><code>O(log n)</code></td>
+                    <td>When sorted order is required.</td>
+                  </tr>
+                  <tr>
+                    <td><code>LinkedHashSet</code></td>
+                    <td>Hash Table + LinkedList</td>
+                    <td>Insertion Order</td>
+                    <td><code>O(1)</code></td>
+                    <td>When insertion order needs to be maintained.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="queue-interface" class="mb-5">
+            <h2>The <code>Queue</code> Interface</h2>
+            <p>
+              A <code>Queue</code> in Java represents an
+              <strong>ordered collection</strong> designed for holding elements
+              prior to processing. Elements in a queue follow a
+              <strong>First-In-First-Out (FIFO)</strong> order, meaning elements
+              are inserted at the rear and removed from the front.
+            </p>
+
+            <h3 class="mt-4">Core Methods in Queue Interface</h3>
+            <p>
+              The <code>Queue</code> interface includes basic operations for
+              adding and removing elements:
+            </p>
+            <ul>
+              <li>
+                <code>boolean add(E element)</code>: Inserts the specified
+                element into the queue. If the queue is full, this method throws
+                an exception.
+              </li>
+              <li>
+                <code>E remove()</code>: Removes and returns the head of the
+                queue. Throws an exception if the queue is empty.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Gentler Variants</h3>
+            <p>
+              To handle errors more gracefully, the <code>Queue</code> interface
+              provides alternatives:
+            </p>
+            <ul>
+              <li>
+                <code>boolean offer(E element)</code>: Attempts to insert the
+                specified element. Returns <code>false</code> if the queue is
+                full.
+              </li>
+              <li>
+                <code>E poll()</code>: Retrieves and removes the head of the
+                queue, returning <code>null</code> if the queue is empty.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Inspecting the Head</h3>
+            <p>
+              The following methods allow inspection of the element at the head
+              without removal:
+            </p>
+            <ul>
+              <li>
+                <code>E element()</code>: Returns the head of the queue but
+                throws an exception if the queue is empty.
+              </li>
+              <li>
+                <code>E peek()</code>: Returns the head of the queue or
+                <code>null</code> if the queue is empty.
+              </li>
+            </ul>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.LinkedList;
+import java.util.Queue;
+public class QueueExample {
+    public static void main(String[] args) {
+
+        // Create a Queue using LinkedList
+        Queue&lt;String&gt; queue = new LinkedList&lt;&gt;();
+
+        // Core Methods
+        System.out.println("Adding elements using add():");
+        queue.add("A");
+        queue.add("B");
+        queue.add("C");
+
+        System.out.println("Queue after additions: " + queue);
+        System.out.println("\nRemoving elements using remove():");
+        System.out.println("Removed element: " + queue.remove());
+        System.out.println("Queue after removal: " + queue);
+
+        // Gentler Variants
+        System.out.println("\nAdding elements using offer():");
+        boolean offerStatus = queue.offer("D");
+        System.out.println("Offer status: " + offerStatus);
+        System.out.println("Queue after offer: " + queue);
+
+        System.out.println("\nPolling elements using poll():");
+        String polledElement = queue.poll();
+        System.out.println("Polled element: " + polledElement);
+        System.out.println("Queue after poll: " + queue);
+
+        // Inspecting the Head
+        System.out.println("\nInspecting the head using element():");
+
+        try {
+            System.out.println("Head of the queue: " + queue.element());
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+
+        System.out.println("\nInspecting the head using peek():");
+        String head = queue.peek();
+        System.out.println("Head of the queue (peek): " + (head != null ? head : "Queue is empty"));
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Adding elements using add():
+Queue after additions: [A, B, C]
+
+Removing elements using remove():
+Removed element: A
+Queue after removal: [B, C]
+
+Adding elements using offer():
+Offer status: true
+Queue after offer: [B, C, D]
+
+Polling elements using poll():
+Polled element: B
+Queue after poll: [C, D]
+
+Inspecting the head using element():
+Head of the queue: C
+
+Inspecting the head using peek():
+Head of the queue (peek): C</code></pre>
+            <ul>
+              <li>
+                <code>add(E element)</code>: Adds an element to the rear of the
+                queue; throws an exception if the queue is full.
+              </li>
+              <li>
+                <code>remove()</code>: Removes and returns the head of the
+                queue; throws an exception if the queue is empty.
+              </li>
+              <li>
+                <code>offer(E element)</code>: Adds an element to the queue and
+                returns <code>false</code> if it fails.
+              </li>
+              <li>
+                <code>poll()</code>: Removes and returns the head; returns
+                <code>null</code> if the queue is empty.
+              </li>
+              <li>
+                <code>element()</code>: Returns the head of the queue; throws an
+                exception if the queue is empty.
+              </li>
+              <li>
+                <code>peek()</code>: Returns the head of the queue or
+                <code>null</code> if empty.
+              </li>
+            </ul>
+
+            <h3 class="mt-5">The <code>Deque</code> Interface</h3>
+            <p>
+              The <code>Deque</code> (Double-Ended Queue) interface extends
+              <code>Queue</code> to allow element insertion and removal from
+              both ends.
+            </p>
+
+            <h4 class="mt-4">Core Methods in <code>Deque</code> Interface</h4>
+            <ol>
+              <li>
+                <strong>Insertion:</strong>
+                <ul>
+                  <li>
+                    <code>boolean addFirst(E element)</code>: Inserts the
+                    element at the front.
+                  </li>
+                  <li>
+                    <code>boolean addLast(E element)</code>: Inserts the element
+                    at the rear.
+                  </li>
+                  <li>
+                    <code>boolean offerFirst(E element)</code>: Attempts to
+                    insert the element at the front.
+                  </li>
+                  <li>
+                    <code>boolean offerLast(E element)</code>: Attempts to
+                    insert the element at the rear.
+                  </li>
+                </ul>
+              </li>
+              <li class="mt-2">
+                <strong>Removal:</strong>
+                <ul>
+                  <li>
+                    <code>E pollFirst()</code>: Removes and returns the front
+                    element or null if the deque is empty.
+                  </li>
+                  <li>
+                    <code>E pollLast()</code>: Removes and returns the rear
+                    element or null if the deque is empty.
+                  </li>
+                </ul>
+              </li>
+              <li class="mt-2">
+                <strong>Inspection:</strong>
+                <ul>
+                  <li>
+                    <code>E getFirst()</code>: Retrieves the front element.
+                    Throws an exception if the deque is empty.
+                  </li>
+                  <li>
+                    <code>E getLast()</code>: Retrieves the rear element. Throws
+                    an exception if the deque is empty.
+                  </li>
+                  <li>
+                    <code>E peekFirst()</code>: Retrieves the front element or
+                    <code>null</code> if the deque is empty.
+                  </li>
+                  <li>
+                    <code>E peekLast()</code>: Retrieves the rear element or
+                    <code>null</code> if the deque is empty.
+                  </li>
+                </ul>
+              </li>
+            </ol>
+
+            <h3 class="mt-5">The <code>PriorityQueue</code> Interface</h3>
+            <p>
+              The <code>PriorityQueue</code> interface extends
+              <code>Queue</code> and orders elements based on their
+              <strong>natural ordering</strong> or a
+              <strong>custom comparator</strong>. Elements with the highest
+              priority are removed first.
+            </p>
+
+            <h4 class="mt-4">Key Characteristics:</h4>
+            <ul>
+              <li>
+                <strong>Insertion</strong>: Operates similarly to a standard
+                queue but ensures elements are placed based on priority.
+              </li>
+              <li>
+                <strong>Removal</strong>: The <code>remove()</code> method
+                retrieves and removes the element with the highest priority.
+              </li>
+            </ul>
+
+            <h4 class="mt-4">Concrete Implementations</h4>
+            <ol>
+              <li>
+                <code>LinkedList</code><br />
+                The <code>LinkedList</code> class implements both
+                <code>Queue</code> and <code>Deque</code>. It provides the
+                following:
+                <ul>
+                  <li>
+                    <strong>Underlying Structure</strong>: Doubly linked list.
+                  </li>
+                  <li>
+                    <strong>Key Characteristics</strong>:
+                    <ul>
+                      <li>Efficient insertion and removal at both ends.</li>
+                      <li>Can function as a queue or deque.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="mt-3">
+                <code>ArrayDeque</code><br />
+                The <code>ArrayDeque</code> class provides a circular array
+                implementation of <code>Deque</code>.
+                <ul>
+                  <li>
+                    <strong>Key Characteristics</strong>:
+                    <ul>
+                      <li>Supports efficient resizing.</li>
+                      <li>
+                        Preferred over LinkedList for stack and queue operations
+                        due to lower overhead.
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ol>
+
+            <div class="note-box mt-4">
+              <h5>
+                <i class="fas fa-layer-group me-2"></i>Summary - The
+                <code>Queue</code> Interface
+              </h5>
+              <p class="mb-0">
+                The <code>Queue</code> and <code>Deque</code> interfaces in Java
+                provide versatile tools for managing ordered collections. While
+                <code>Queue</code> ensures <strong>FIFO</strong> behavior,
+                <code>Deque</code> allows for flexible
+                <strong>insertions and removals from both ends</strong>.
+                Implementations like <code>LinkedList</code> and
+                <code>ArrayDeque</code> cater to different performance needs,
+                enabling developers to choose the most suitable structure for
+                their applications.
+              </p>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="maps" class="mb-5">
+            <h2>Maps</h2>
+            <p>
+              The <code>Map</code> interface in Java is designed to handle
+              key-value pairs, enabling efficient data storage and retrieval
+              based on unique keys. Unlike the
+              <code>Collection</code> interface, which deals with grouped data
+              (e.g., arrays, lists, and sets), <code>Map</code> focuses on
+              key-value structures, analogous to dictionaries in Python.
+            </p>
+            <p>A Map has two type parameters:</p>
+            <ul>
+              <li><strong>K</strong>: The type for keys.</li>
+              <li><strong>V</strong>: The type for values.</li>
+            </ul>
+
+            <p><strong>Key operations include:</strong></p>
+            <ul>
+              <li>
+                <code>get(K key)</code>: Retrieves the value associated with a
+                key.
+              </li>
+              <li>
+                <code>put(K key, V value)</code>: Updates or adds a key-value
+                pair.
+              </li>
+              <li>
+                <code>containsKey(Object key)</code> and
+                <code>containsValue(Object value)</code>: Check for the presence
+                of specific keys or values.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Key Characteristics of Maps</h3>
+            <ul>
+              <li>
+                <strong>Keys form a set</strong>: Each key is unique, and adding
+                a new value with an existing key overwrites the old value.
+              </li>
+              <li>
+                <code>put(K key, V value)</code> returns the previous value
+                associated with the key or <code>null</code> if no such value
+                existed.
+              </li>
+            </ul>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.HashMap;
+import java.util.Map;
+public class CoreMapOperations {
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+
+        // Adding key-value pairs using put()
+        scores.put("Alice", 85);
+        scores.put("Bob", 90);
+
+        // Retrieving values using get()
+        System.out.println("Score of Alice: " + scores.get("Alice"));
+
+        // Checking for keys and values
+        System.out.println("Contains key 'Bob'? " + scores.containsKey("Bob"));
+        System.out.println("Contains value 90? " + scores.containsValue(90));
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre class="bg-dark text-light p-3 rounded"><code>Score of Alice: 85
+Contains key 'Bob'? true
+Contains value 90? true</code></pre>
+
+            <h3 class="mt-4">Updating Maps</h3>
+            <p>
+              To address the initialization problem—whether to update an
+              existing entry or create a new one—Java provides:
+            </p>
+
+            <ol>
+              <li>
+                <code>getOrDefault(K key, V defaultValue)</code>: Returns the
+                value for a key if it exists; otherwise, returns a default
+                value.
+              </li>
+            </ol>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.*;
+
+public class MapGetOrDefault {
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+
+        int defaultScore = scores.getOrDefault("Charlie", 0);
+        System.out.println("Default score for Charlie: " + defaultScore);
+
+        scores.put("Charlie", defaultScore + 10);
+        System.out.println("Updated score for Charlie: " + scores.get("Charlie"));
+    }
+}</code></pre>
+            </div>
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Default score for Charlie: 0
+Updated score for Charlie: 10</code></pre>
+
+            <ol start="2">
+              <li>
+                <code>putIfAbsent(K key, V value)</code>: Adds a key-value pair
+                only if the key is missing.
+              </li>
+            </ol>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.*;
+
+public class MapPutIfAbsent {
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+
+        // Adding a key-value pair only if the key is absent
+
+        scores.putIfAbsent("Dave", 50);
+        scores.putIfAbsent("Dave", 100); // Has no effect
+        System.out.println("Score of Dave: " + scores.get("Dave"));
+    }
+}</code></pre>
+            </div>
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Score of Dave: 50</code></pre>
+
+            <ol start="3">
+              <li>
+                <code
+                  >merge(K key, V value, BiFunction&lt;V, V, V&gt;
+                  remappingFunction)</code
+                >: Combines the current value with a new value using a specified
+                function.
+              </li>
+            </ol>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.*;
+
+public class MapMerge {
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+        scores.put("Eve", 20);
+
+        // Merging values using a remapping function
+        scores.merge("Eve", 10, Integer::sum);
+        System.out.println("Updated score for Eve: " + scores.get("Eve"));
+    }
+}</code></pre>
+            </div>
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Updated score for Eve: 30</code></pre>
+
+            <h3 class="mt-4">Extracting Keys and Values</h3>
+            <p>Maps provide methods to extract subsets of their data:</p>
+            <ul>
+              <li>
+                <code>keySet()</code>: Returns a <code>Set</code> of all keys.
+              </li>
+              <li>
+                <code>values()</code>: Returns a <code>Collection</code> of all
+                values.
+              </li>
+              <li>
+                <code>entrySet()</code>: Returns a <code>Set</code> of key-value
+                pairs as <code>Map.Entry&lt;K, V&gt;</code> objects.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Iterating Over a Map</h3>
+            <ul>
+              <li>
+                <strong>Using <code>keySet()</code></strong> – Iterates over the
+                keys and retrieves values using them.
+              </li>
+              <li>
+                <strong>Using <code>values()</code></strong> – Iterates directly
+                over the values.
+              </li>
+              <li>
+                <strong>Using <code>entrySet()</code></strong> – Iterates over
+                key-value pairs together.
+              </li>
+              <li>
+                <strong>Using an Iterator</strong> – Useful when modifying the
+                map while iterating.
+              </li>
+            </ul>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.*;
+
+public class MapExtractingData {
+    public static void main(String[] args) {
+
+    Map&lt;String, Integer&gt; scores = Map.of("Alice", 85, "Bob", 90);
+
+    // Extracting keys
+    System.out.println("Keys: " + scores.keySet());
+
+    // Extracting values
+    System.out.println("Values: " + scores.values());
+
+    // Extracting entries
+    System.out.println("Entries: " + scores.entrySet());
+    }
+}</code></pre>
+            </div>
+            <p><strong>Output:</strong></p>
+            <pre class="bg-dark text-light p-3 rounded"><code>Keys: [Alice, Bob]
+Values: [85, 90]
+Entries: [Alice=85, Bob=90]</code></pre>
+
+            <h3 class="mt-4">Concrete Implementations of Maps</h3>
+            <p>
+              Java provides multiple implementations of the
+              <code>Map</code> interface, each with distinct features:
+            </p>
+
+            <h4 class="mt-3">1. <code>HashMap</code></h4>
+            <ul>
+              <li>Uses a hash table for storage.</li>
+              <li>Provides fast access but does not guarantee order.</li>
+            </ul>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.HashMap;
+import java.util.Map;
+
+public class HashMapExample {
+
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; hashMap = new HashMap&lt;&gt;();
+
+        // Adding key-value pairs
+        hashMap.put("Alice", 85);
+        hashMap.put("Bob", 90);
+        hashMap.put("Charlie", 75);
+
+        // Printing the HashMap
+        System.out.println("HashMap:");
+
+        for (Map.Entry&lt;String, Integer&gt; entry : hashMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+}</code></pre>
+            </div>
+            <p><strong>Output:</strong></p>
+            <pre class="bg-dark text-light p-3 rounded"><code>HashMap:
+Alice : 85
+Charlie : 75
+Bob : 90</code></pre>
+
+            <h4 class="mt-3">2. <code>TreeMap</code></h4>
+            <ul>
+              <li>Uses a <em>balanced search tree</em>.</li>
+              <li>Keys are sorted in natural or custom order.</li>
+            </ul>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Map;
+import java.util.TreeMap;
+
+public class TreeMapExample {
+
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; treeMap = new TreeMap&lt;&gt;();
+
+        // Adding key-value pairs
+        treeMap.put("Alice", 85);
+        treeMap.put("Charlie", 75);
+        treeMap.put("Bob", 90);
+
+        // Printing the TreeMap (Keys are sorted in ascending order)
+        System.out.println("TreeMap (Keys sorted):");
+
+        for (Map.Entry&lt;String, Integer&gt; entry : treeMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+}</code></pre>
+            </div>
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>TreeMap (Keys sorted):
+Alice : 85
+Bob : 90
+Charlie : 75</code></pre>
+
+            <h4 class="mt-3">3. <code>LinkedHashMap</code></h4>
+            <ul>
+              <li>Maintains insertion order or access order.</li>
+              <li>Ideal for implementing least recently used (LRU) caching.</li>
+            </ul>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class LinkedHashMapExample {
+
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; linkedHashMap = new LinkedHashMap&lt;&gt;();
+
+        // Adding key-value pairs
+        linkedHashMap.put("Alice", 85);
+        linkedHashMap.put("Bob", 90);
+
+        // Printing the LinkedHashMap (Preserves insertion order)
+        System.out.println("LinkedHashMap (Insertion Order):");
+
+        for (Map.Entry&lt;String, Integer&gt; entry : linkedHashMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+}</code></pre>
+            </div>
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>LinkedHashMap (Insertion Order):
+Alice : 85
+Bob : 90
+Charlie : 75</code></pre>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container content-container">
+        <div class="row">
+          <div class="col-lg-8 mb-4">
+            <h5>Programming Concepts Using Java</h5>
+            <p>
+              An online companion for the Java programming course at IIT Madras
+              BS Degree program.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4">
+            <h5>Quick Links</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="../index.html"><i class="fas fa-home me-2"></i>Home</a>
+              </li>
+              <li>
+                <a href="../week-5/summary.html"
+                  ><i class="fas fa-backward me-2"></i>Week 5</a
+                >
+              </li>
+              <li>
+                <a href="../week-7/summary.html"
+                  ><i class="fas fa-forward me-2"></i>Week 7</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="text-center">
+          <p class="mb-0">
+            &copy; 2026 IIT Madras BS Degree Program. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/codeblocks.js"></script>
+  </body>
+</html>
