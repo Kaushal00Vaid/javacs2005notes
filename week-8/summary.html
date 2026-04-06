@@ -1,0 +1,1369 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Java - Week 8 Summary</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <img src="../assets/logo.png" alt="Java IIT MBS Logo" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-7/summary.html"
+                ><i class="fas fa-backward"></i> Week 7</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-9/summary.html"
+                ><i class="fas fa-forward"></i> Week 9</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero-section">
+      <div class="container content-container">
+        <div class="hero-content">
+          <div class="hero-text text-center">
+            <h1>Java - Week 8</h1>
+            <p>Cloning, Type Inference, Higher Order Functions, and Streams</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container content-container my-5">
+      <div class="row">
+        <div class="col-lg-3 mb-4">
+          <div class="course-nav p-3 rounded">
+            <h5 class="mb-3">Table of Contents</h5>
+            <div class="nav flex-column">
+              <a class="nav-link active" href="#cloning"
+                ><i class="fas fa-clone me-2"></i>Cloning</a
+              >
+              <a class="nav-link" href="#type-inference"
+                ><i class="fas fa-lightbulb me-2"></i>Type Inference</a
+              >
+              <a class="nav-link" href="#higher-order-function"
+                ><i class="fas fa-arrow-up me-2"></i>Higher Order Function</a
+              >
+              <a class="nav-link" href="#streams"
+                ><i class="fas fa-water me-2"></i>Streams</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <section id="cloning" class="mb-5">
+            <h2>Cloning</h2>
+            <p>
+              In Java, creating a faithful copy of an object is not as
+              straightforward as assigning one variable to another.
+            </p>
+
+            <h4 class="mt-4">Normal Assignment</h4>
+            <p>
+              When you assign one object reference to another, both variables
+              point to the same object in memory. Changes made through one
+              reference affect the object visible through the other reference.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public class Employee {
+    private String name;
+    private double salary;
+
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + "}";
+    }
+
+    public static void main(String[] args) {
+        Employee e1 = new Employee("Dhruv", 21500.0);
+        Employee e2 = e1; // e2 refers to the same object as e1
+        e2.setName("Eknath");
+        System.out.println(e1); // Output: Employee{name='Eknath', salary=21500.0}
+    }
+}</code></pre>
+            </div>
+
+            <p>
+              In this example, both <code>e1</code> and <code>e2</code> refer to
+              the same object. Updating the name through <code>e2</code> also
+              changes the name as seen through <code>e1</code>.
+            </p>
+
+            <h3 class="mt-4">The <code>clone()</code> Method</h3>
+            <p>
+              The <code>clone()</code> method, provided by the
+              <code>Object</code> class, creates a bitwise (shallow) copy of the
+              object. To enable cloning, the class must implement the
+              <code>Cloneable</code> interface, and the
+              <code>clone()</code> method must be overridden as public.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Date;
+
+public class Employee implements Cloneable {
+    private String name;
+    private double salary;
+    private Date birthday;
+
+    public Employee(String name, double salary, Date birthday) {
+        this.name = name;
+        this.salary = salary;
+        this.birthday = birthday;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirthday(int day, int month, int year) {
+        this.birthday.setDate(day);
+        this.birthday.setMonth(month);
+        this.birthday.setYear(year);
+    }
+
+    @Override
+    public Employee clone() throws CloneNotSupportedException {
+        return (Employee) super.clone(); // Shallow copy
+    }
+
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + ", birthday=" + birthday + "}";
+    }
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Date birthday = new Date(97, 3, 16); // April 16, 1997
+        Employee e1 = new Employee("Dhruv", 21500.0, birthday);
+        Employee e2 = e1.clone(); // Shallow copy
+
+        e2.setName("Eknath");
+        e2.setBirthday(18, 5, 1990); // Changes shared Date object
+
+        // Birthday and name changes affect e1 due to shallow copy
+        System.out.println(e1);
+        System.out.println(e2);
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Employee{name='Dhruv', salary=21500.0, birthday=Fri May 18 00:00:00 IST 1990}
+Employee{name='Eknath', salary=21500.0, birthday=Fri May 18 00:00:00 IST 1990}</code></pre>
+
+            <h3 class="mt-4">Shallow Copy vs. Deep Copy</h3>
+            <ul>
+              <li class="mb-2">
+                <strong>Shallow Copy</strong><br />
+                Copies the top-level structure of the object but does not clone
+                the nested objects. Changes to mutable nested objects in one
+                copy affect the other.
+              </li>
+              <li>
+                <strong>Deep Copy</strong><br />
+                Recursively clones all nested objects, creating a fully
+                independent copy.
+              </li>
+            </ul>
+
+            <p><strong>Code Example of Deep Copy:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Date;
+
+public class Employee implements Cloneable {
+    private String name;
+    private double salary;
+    private Date birthday;
+
+    public Employee(String name, double salary, Date birthday) {
+        this.name = name;
+        this.salary = salary;
+        this.birthday = birthday;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirthday(int day, int month, int year) {
+        this.birthday.setDate(day);
+        this.birthday.setMonth(month);
+        this.birthday.setYear(year);
+    }
+
+    @Override
+    public Employee clone() throws CloneNotSupportedException {
+        Employee cloned = (Employee) super.clone(); // Shallow copy
+        cloned.birthday = (Date) birthday.clone(); // Deep copy of mutable object
+        return cloned;
+    }
+
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + ", birthday=" + birthday + "}";
+    }
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Date birthday = new Date(97, 3, 16); // April 16, 1997
+        Employee e1 = new Employee("Dhruv", 21500.0, birthday);
+        Employee e2 = e1.clone(); // Deep copy
+
+        e2.setName("Eknath");
+        e2.setBirthday(18, 5, 1990);
+
+        System.out.println(e1); // e1 remains unchanged
+        System.out.println(e2);
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Output:</strong></p>
+            <pre
+              class="bg-dark text-light p-3 rounded"
+            ><code>Employee{name='Dhruv', salary=21500.0, birthday=Wed Apr 16 00:00:00 IST 1997}
+Employee{name='Eknath', salary=21500.0, birthday=Fri May 18 00:00:00 IST 1990}</code></pre>
+
+            <h3 class="mt-4">Cloning and Inheritance</h3>
+            <p>
+              Cloning becomes more complex when inheritance is involved. If a
+              subclass adds additional mutable fields, the inherited
+              <code>clone()</code> method will not automatically deep-copy these
+              fields. Each subclass must override <code>clone()</code> to ensure
+              proper behavior.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Date;
+
+public class Manager extends Employee {
+    private Date promotionDate;
+
+    public Manager(String name, double salary, Date birthday, Date promotionDate) {
+        super(name, salary, birthday);
+        this.promotionDate = promotionDate;
+    }
+
+    @Override
+    public Manager clone() throws CloneNotSupportedException {
+        Manager cloned = (Manager) super.clone();
+        cloned.promotionDate = (Date) promotionDate.clone(); // Deep copy of promotionDate
+        return cloned;
+    }
+
+    public String toString() {
+        return super.toString() + ", promotionDate=" + promotionDate;
+    }
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Date birthday = new Date(97, 3, 16);
+        Date promotionDate = new Date(121, 5, 18);
+
+        Manager m1 = new Manager("Dhruv", 40000.0, birthday, promotionDate);
+        Manager m2 = m1.clone();
+
+        m2.setName("Eknath");
+        m2.setBirthday(18, 5, 1990);
+        m2.promotionDate.setDate(1);
+
+        System.out.println(m1);
+        System.out.println(m2);
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">Restrictions on Cloning</h3>
+            <ol>
+              <li>
+                <strong>Interface:</strong> A class must implement the
+                <code>Cloneable</code> marker interface to use the
+                <code>clone()</code> method.
+              </li>
+              <li>
+                <strong>Visibility:</strong> The <code>clone()</code> method in
+                <code>Object</code> is protected. It must be overridden as
+                public for external use.
+              </li>
+              <li>
+                <strong>Exception Handling:</strong> The
+                <code>clone()</code> method in <code>Object</code> throws
+                <code>CloneNotSupportedException</code>. Subclasses must either
+                declare or handle this exception.
+              </li>
+            </ol>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="type-inference" class="mb-5">
+            <h2>Type Inference</h2>
+            <p>
+              Java is a strongly typed programming language, which means every
+              variable must be explicitly declared with its type before use.
+              This enables the compiler to enforce type safety, ensuring that
+              programs are well-typed and free from a significant category of
+              runtime errors. However, in recent years, Java has incorporated
+              limited support for type inference to reduce redundancy in type
+              declarations.
+            </p>
+
+            <h3 class="mt-4">Type Declarations in Java</h3>
+            <p>
+              Type declarations explicitly specify the type of a variable when
+              it is defined.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public class Employee {
+    private String name;
+    private double salary;
+
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + "}";
+    }
+
+    public static void main(String[] args) {
+        Employee e1 = new Employee("Dhruv", 21500.0);
+        Employee e2 = e1;
+        e2.setName("Eknath");
+
+        System.out.println(e1); // Output: Employee{name='Eknath', salary=21500.0}
+    }
+}</code></pre>
+            </div>
+
+            <p>
+              In this example, <code>e1</code> and <code>e2</code> are
+              explicitly declared as <code>Employee</code> objects. The compiler
+              ensures type safety by verifying that the assignments and
+              operations involving these variables are consistent with the
+              <code>Employee</code> type.
+            </p>
+
+            <h3 class="mt-4">Key Features of Type Inference in Java</h3>
+            <p>
+              Type inference allows the compiler to deduce the type of a
+              variable based on the context of its initialization. In Java, type
+              inference is supported for local variables using the
+              <code>var</code> keyword, introduced in Java 10.
+            </p>
+            <ol>
+              <li>
+                <strong>Local Variables Only</strong>: Type inference is
+                applicable only for local variables within methods or blocks,
+                not for instance variables or method parameters.
+              </li>
+              <li>
+                <strong>Mandatory Initialization</strong>: Variables declared
+                with <code>var</code> must be initialized at the time of
+                declaration.
+              </li>
+              <li>
+                <strong>Inference from Initialization</strong>: The compiler
+                determines the type of the variable based on the expression used
+                to initialize it.
+              </li>
+            </ol>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public class TypeInferenceExample {
+    public static void main(String[] args) {
+        var name = "Dhruv"; // Inferred as String
+        var salary = 21500.0; // Inferred as double
+
+        System.out.println("Name: " + name);
+        System.out.println("Salary: " + salary);
+
+        var employee = new Employee("Eknath", 30000.0); // Inferred as Employee
+        System.out.println(employee);
+    }
+}</code></pre>
+            </div>
+
+            <p>
+              In this example, the type of each variable is inferred from its
+              initialization. For instance, <code>name</code> is inferred as
+              <code>String</code>, <code>salary</code> as <code>double</code>,
+              and <code>employee</code> as <code>Employee</code>.
+            </p>
+
+            <h3 class="mt-4">Benefits of Type Inference</h3>
+            <ol>
+              <li class="mb-2">
+                <strong>Reduced Redundancy</strong>: Eliminates the need to
+                repeat type information in declarations, making code more
+                concise.<br />
+                <strong>For Example:</strong><br />
+                <code>Manager m = new Manager("Ravi", 50000.0);</code><br />
+                can be simplified to:<br />
+                <code>var m = new Manager("Ravi", 50000.0);</code>
+              </li>
+              <li class="mb-2">
+                <strong>Improved Readability</strong>: Simplifies code by
+                reducing clutter, especially in cases involving generics or
+                complex type hierarchies.
+              </li>
+              <li class="mb-2">
+                <strong>Enhanced Productivity</strong>: Allows developers to
+                focus on logic rather than writing verbose type annotations.
+              </li>
+            </ol>
+
+            <h3 class="mt-4">Limitations of Type Inference</h3>
+            <ol>
+              <li class="mb-2">
+                <strong>Limited Scope</strong>: Applicable only to local
+                variables. Instance variables and method parameters still
+                require explicit type declarations.
+              </li>
+              <li class="mb-2">
+                <strong>Potential Ambiguity</strong>: Without explicit types,
+                understanding the inferred type requires examining the
+                initialization expression.
+              </li>
+              <li class="mb-2">
+                <strong>Initialization Requirement</strong>: Variables declared
+                with <code>var</code> must be initialized, which can sometimes
+                lead to verbose or repetitive initialization expressions.
+              </li>
+              <li class="mb-2">
+                <strong>Precision</strong>: The inferred type is the most
+                specific type possible.<br />
+                For instance:<br />
+                <code>var e = new Manager("Ravi", 50000.0);</code><br />
+                Here, <code>e</code> is inferred as <code>Manager</code>. If
+                <code>e</code> should have been <code>Employee</code>, an
+                explicit declaration is required:<br />
+                <code>Employee e = new Manager("Ravi", 50000.0);</code>
+              </li>
+            </ol>
+
+            <h3 class="mt-4">Propagation of Inferred Types</h3>
+            <p>
+              Type inference allows the compiler to propagate type information
+              through expressions.
+            </p>
+            <p><strong>For Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>var s = "Hello, "; // Inferred as String
+var t = s + "world!"; // Propagated as String
+System.out.println(t);</code></pre>
+            </div>
+            <p>
+              The inferred type of <code>t</code> is <code>String</code> because
+              it is the result of concatenating <code>s</code> (inferred as
+              <code>String</code>) with another string constant.
+            </p>
+
+            <h3 class="mt-4">Static Type Checking</h3>
+            <p>
+              Java performs static type checking at compile-time, ensuring that
+              all type inferences are consistent with the declared types in the
+              code. For example, consider the following:
+            </p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Employee e;
+Manager m = new Manager("Ravi", 50000.0);
+e = m; // Allowed due to subtyping (Manager extends Employee)
+
+var x = e;
+x.bonus(); // Compilation error: Employee does not have a bonus() method</code></pre>
+            </div>
+            <p>
+              Here, the inferred type of <code>x</code> is
+              <code>Employee</code>, so invoking <code>bonus()</code> on
+              <code>x</code> results in a compilation error.
+            </p>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="higher-order-function" class="mb-5">
+            <h2>Higher Order Function</h2>
+            <p>
+              A higher-order function is a function that takes another function
+              as an argument. While this concept is common in many programming
+              paradigms, its integration into Java—a strongly object-oriented
+              language—is achieved through interfaces and functional programming
+              constructs like <strong>lambda expressions</strong> and
+              <strong>method references</strong>.
+            </p>
+
+            <h3 class="mt-4">Callbacks Example</h3>
+            <p>
+              A typical use case for higher-order functions is a callback
+              mechanism. Consider a scenario where an object,
+              <code>MyClass</code>, creates a <code>Timer</code> that runs in
+              parallel. When the timer expires, it must notify
+              <code>MyClass</code>.
+            </p>
+            <p>
+              In object-oriented programming, this is achieved using an
+              <code>interface</code>:
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public interface TimerOwner {
+    void timerDone();
+}
+
+public class MyClass implements TimerOwner {
+    @Override
+    public void timerDone() {
+        System.out.println("Timer has expired.");
+    }
+
+    public static void main(String[] args) {
+        MyClass myClass = new MyClass();
+        Timer timer = new Timer(myClass);
+        timer.start();
+    }
+}
+
+public class Timer implements Runnable {
+    private final TimerOwner owner;
+
+    public Timer(TimerOwner owner) {
+        this.owner = owner;
+    }
+
+    public void start() {
+        new Thread(this).start();
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(5000); // Simulate timer
+            owner.timerDone();
+        } catch (InterruptedException e) {
+            System.out.println("Timer interrupted.");
+        }
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">
+              Customizing Behavior with <code>Comparator</code>
+            </h3>
+            <p>
+              The <code>Comparator</code> interface is a practical example of
+              higher-order functions in Java. It allows customization of the
+              <code>Arrays.sort</code> method by specifying a comparison
+              function.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Arrays;
+import java.util.Comparator;
+
+public class StringLengthSorter {
+    public static void main(String[] args) {
+        String[] strings = {"apple", "banana", "cherry"};
+
+        Arrays.sort(strings, new Comparator&lt;String&gt;() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.length() - s2.length();
+            }
+        });
+
+        System.out.println(Arrays.toString(strings));
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">Functional Interfaces</h3>
+            <p>
+              Functional interfaces are interfaces with a single abstract
+              method.<br />
+              Examples include <code>Comparator</code> and
+              <code>TimerOwner</code>. Functional interfaces enable passing
+              behavior using anonymous classes or lambda expressions.
+            </p>
+
+            <h3 class="mt-4">Lambda Expressions</h3>
+            <p>
+              Lambda expressions are anonymous functions that can be used
+              wherever a functional interface is required. They are concise and
+              eliminate the need for verbose anonymous class implementations.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Arrays;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        String[] strings = {"apple", "banana", "cherry"};
+
+        Arrays.sort(strings, (s1, s2) -&gt; s1.length() - s2.length());
+
+        System.out.println(Arrays.toString(strings));
+    }
+}</code></pre>
+            </div>
+            <p>
+              In this example,
+              <code>(s1, s2) -&gt; s1.length() - s2.length()</code> is a lambda
+              expression that replaces the anonymous class implementation.
+            </p>
+
+            <h4 class="mt-3">Complex Lambda Expressions</h4>
+            <p>
+              Lambda expressions can include multiple statements within a block,
+              making them suitable for more complex logic.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Arrays.sort(strings, (s1, s2) -&gt; {
+    if (s1.length() &lt; s2.length())
+        return -1;
+    else if (s1.length() &gt; s2.length())
+        return 1;
+    else
+        return 0;
+});</code></pre>
+            </div>
+
+            <h4 class="mt-3">Method References</h4>
+            <p>
+              If a lambda expression consists of a single method call, it can be
+              replaced by a method reference. Method references simplify code
+              further by directly referencing existing methods.
+            </p>
+
+            <p><strong>Code Example:</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Arrays;
+import java.util.List;
+
+public class MethodReferenceExample {
+    public static void main(String[] args) {
+        List&lt;String&gt; strings = Arrays.asList("apple", "banana", "cherry");
+
+        strings.forEach(System.out::println); // Method reference
+    }
+}</code></pre>
+            </div>
+
+            <p><strong>Method Reference Syntax</strong></p>
+            <ol>
+              <li>
+                <strong>Static Method</strong>:
+                <code>ClassName::methodName</code>
+              </li>
+              <li>
+                <strong>Instance Method of Specific Object</strong>:
+                <code>object::methodName</code>
+              </li>
+              <li>
+                <strong>Instance Method of Arbitrary Object of a Class</strong>:
+                <code>ClassName::methodName</code>
+              </li>
+              <li><strong>Constructor</strong>: <code>ClassName::new</code></li>
+            </ol>
+
+            <p><em>Example with Constructor Reference</em></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.function.Function;
+
+public class ConstructorReferenceExample {
+    public static void main(String[] args) {
+        Function&lt;String, Integer&gt; stringToInteger = Integer::new;
+        Integer number = stringToInteger.apply("123");
+
+        System.out.println(number);
+    }
+}</code></pre>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="streams" class="mb-5">
+            <h2>Streams</h2>
+            <p>
+              Collections in Java provide a powerful way to store and manipulate
+              groups of elements. Traditionally, an <strong>iterator</strong> is
+              used to sequentially process these elements. Java’s
+              <strong>streams</strong> offer an alternative declarative and
+              functional approach for working with collections.
+            </p>
+            <p>
+              Streams enable operations such as filtering, mapping, and
+              reducing, often in a more concise and readable manner.
+            </p>
+
+            <p><strong>Example:</strong> <em>Counting Long Words</em></p>
+            <ul>
+              <li>Using an Iterator:</li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.List;
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        // Example list of words
+        List&lt;String&gt; words = Arrays.asList(
+            "banana", "hippopotamus", "apple", "elephant", "encyclopedia"
+        );
+
+        // Initialize count to 0
+        long count = 0;
+
+        // Iterate over each word in the list
+        for (String word : words) {
+            // Check if the word length is greater than 10
+            if (word.length() &gt; 10) {
+                count++;
+            }
+        }
+
+        // Output the count of words with length greater than 10
+        System.out.println("Number of words with length greater than 10: " + count);
+    }
+}</code></pre>
+            </div>
+
+            <ul>
+              <li>Using Streams:</li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.List;
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        List&lt;String&gt; words = Arrays.asList(
+            "banana", "hippopotamus", "apple", "elephant", "encyclopedia"
+        );
+
+        // Using streams to count words with length greater than 10
+        long count = words.stream()
+                          .filter(w -&gt; w.length() &gt; 10)
+                          .count();
+
+        System.out.println("Number of words with length greater than 10: " + count);
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">Why Use Streams?</h3>
+            <ol>
+              <li class="mb-2">
+                <strong>Declarative Style:</strong> Focus on what to compute
+                rather than how to compute.
+              </li>
+              <li class="mb-2">
+                <strong>Parallel Processing:</strong> Operations like
+                <code>filter()</code> and <code>count()</code> can be
+                parallelized.
+              </li>
+              <li class="mb-2">
+                <strong>Lazy Evaluation:</strong> Streams process elements only
+                when needed, optimizing performance.
+              </li>
+              <li class="mb-2">
+                <strong>Support for Infinite Streams:</strong> Streams can
+                generate values dynamically, even for infinite sequences.
+              </li>
+            </ol>
+
+            <p><strong>Example:</strong> <em>Parallel Streams</em></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>long count = words.parallelStream()
+                  .filter(w -&gt; w.length() &gt; 10)
+                  .count();</code></pre>
+            </div>
+
+            <h3 class="mt-4">Working with Streams</h3>
+            <p>Streams allow you to:</p>
+            <ol>
+              <li>Create a Stream</li>
+              <li>Apply Intermediate Operations (transformations)</li>
+              <li>Apply a Terminal Operation (result computation)</li>
+            </ol>
+            <p>
+              Streams are non-destructive; they do not modify the underlying
+              collection.
+            </p>
+
+            <p><em>Example Workflow:</em></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>long count = words.stream()
+                  .filter(w -&gt; w.length() &gt; 10) // Intermediate operation
+                  .count(); // Terminal operation</code></pre>
+            </div>
+
+            <h3 class="mt-4">Creating Streams</h3>
+            <p>Streams can be Created from:</p>
+
+            <p><strong>1. Collections</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>List&lt;String&gt; wordList = Arrays.asList(
+    "banana", "hippopotamus", "apple", "elephant", "encyclopedia"
+);
+
+Stream&lt;String&gt; wordStream = wordList.stream();</code></pre>
+            </div>
+
+            <p><strong>2. Arrays</strong></p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>String[] wordArr = {
+    "banana", "hippopotamus", "apple", "elephant", "encyclopedia"
+};
+
+Stream&lt;String&gt; wordStream = Stream.of(wordArr);</code></pre>
+            </div>
+
+            <p><strong>3. Generated Values</strong></p>
+            <ul>
+              <li>Using <code>Stream.generate()</code></li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;String&gt; echos = Stream.generate(() -&gt; "Echo");
+Stream&lt;Double&gt; randomDs = Stream.generate(Math::random);</code></pre>
+            </div>
+
+            <ul>
+              <li>Using <code>Stream.iterate()</code></li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;Integer&gt; integers = Stream.iterate(0, n -&gt; n + 1);</code></pre>
+            </div>
+
+            <ul>
+              <li>With a termination condition:</li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;Integer&gt; limitedIntegers = Stream.iterate(0, n -&gt; n &lt; 100, n -&gt; n + 1);</code></pre>
+            </div>
+
+            <h3 class="mt-4">Transforming Streams</h3>
+            <ul>
+              <li class="mb-2">
+                <strong>Filtering</strong><br />
+                Filters elements based on a predicate:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;String&gt; longWords = wordList.stream()
+    .filter(w -&gt; w.length() &gt; 10);</code></pre>
+            </div>
+
+            <ul>
+              <li class="mb-2">
+                <strong>Mapping</strong><br />
+                Applies a function to each element:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;String&gt; startLongWords = wordList.stream()
+    .filter(w -&gt; w.length() &gt; 10)
+    .map(s -&gt; s.substring(0, 1));</code></pre>
+            </div>
+
+            <ul>
+              <li class="mb-2">
+                <strong>Flattening</strong><br />
+                Combines nested lists into a single stream:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;Character&gt; letters = wordList.stream()
+    .flatMap(s -&gt; s.chars().mapToObj(c -&gt; (char) c));</code></pre>
+            </div>
+
+            <h3 class="mt-4">Managing Stream Size</h3>
+            <ul>
+              <li class="mb-2">
+                <strong>Limiting</strong><br />
+                Restricts the stream to a fixed number of elements:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;Double&gt; randomDs = Stream.generate(Math::random)
+    .limit(100);</code></pre>
+            </div>
+
+            <ul>
+              <li class="mb-2">
+                <strong>Skipping</strong><br />
+                Skips the first <code>n</code> elements:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;Double&gt; randomds = Stream.generate(Math::random).skip(10);</code></pre>
+            </div>
+
+            <ul>
+              <li class="mb-2">
+                <strong>Conditional Stopping</strong>
+                <ul>
+                  <li>
+                    <strong>Take While</strong>: Stops when a condition becomes
+                    false:
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;Double&gt; filtered = Stream.generate(Math::random)
+      .takeWhile(n -&gt; n &gt;= 0.5);</code></pre>
+            </div>
+            <ul>
+              <li>
+                <ul>
+                  <li>
+                    <strong>Drop While</strong>: Starts when a condition becomes
+                    false:
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>Stream&lt;Double&gt; filtered = Stream.generate(Math::random)
+      .dropWhile(n -&gt; n &lt;= 0.05);</code></pre>
+            </div>
+
+            <h3 class="mt-4">Reducing Streams</h3>
+            <ul>
+              <li class="mb-2">
+                <strong>Counting</strong><br />
+                Counts the number of elements:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>long count = Stream.generate(Math::random)
+    .limit(100)
+    .filter(n -&gt; n &gt; 0.1)
+    .count();</code></pre>
+            </div>
+
+            <ul>
+              <li class="mb-2">
+                <strong>Finding Maximum/Minimum</strong><br />
+                Finds the largest/smallest element based on a comparator:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Optional;
+import java.util.stream.Stream;
+
+public class MaxRandomExample {
+    public static void main(String[] args) {
+        Optional&lt;Double&gt; maxRand = Stream.generate(Math::random)
+            .limit(100)
+            .max(Double::compareTo);
+
+        // Print the maximum random number if present
+        maxRand.ifPresentOrElse(
+            max -&gt; System.out.println("Maximum random number: " + max),
+            () -&gt; System.out.println("No maximum value found")
+        );
+    }
+}</code></pre>
+            </div>
+
+            <ul>
+              <li class="mb-2">
+                <strong>Finding the First Element</strong><br />
+                Retrieves the first element:
+              </li>
+            </ul>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>import java.util.Optional;
+import java.util.stream.Stream;
+
+public class FirstRandomExample {
+    public static void main(String[] args) {
+        Optional&lt;Double&gt; firstRand = Stream.generate(Math::random)
+            .limit(100)
+            .filter(n -&gt; n &gt; 0.999)
+            .findFirst();
+
+        // Print the first matching random number if present
+        firstRand.ifPresentOrElse(
+            num -&gt; System.out.println("First random number > 0.999: " + num),
+            () -&gt; System.out.println("No number greater than 0.999 found")
+        );
+    }
+}</code></pre>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container content-container">
+        <div class="row">
+          <div class="col-lg-8 mb-4">
+            <h5>Programming Concepts Using Java</h5>
+            <p>
+              An online companion for the Java programming course at IIT Madras
+              BS Degree program.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4">
+            <h5>Quick Links</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="../index.html"><i class="fas fa-home me-2"></i>Home</a>
+              </li>
+              <li>
+                <a href="../week-7/summary.html"
+                  ><i class="fas fa-backward me-2"></i>Week 7</a
+                >
+              </li>
+              <li>
+                <a href="../week-9/summary.html"
+                  ><i class="fas fa-forward me-2"></i>Week 9</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="text-center">
+          <p class="mb-0">
+            &copy; 2026 IIT Madras BS Degree Program. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/codeblocks.js"></script>
+  </body>
+</html>
