@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Java - Week 10 Summary</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <img src="../assets/logo.png" alt="Java IIT MBS Logo" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-9/summary.html"
+                ><i class="fas fa-backward"></i> Week 9</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../week-11/summary.html"
+                ><i class="fas fa-forward"></i> Week 11</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero-section">
+      <div class="container content-container">
+        <div class="hero-content">
+          <div class="hero-text text-center">
+            <h1>Java - Week 10</h1>
+            <p>
+              Concurrency: Threads, Race Conditions, Mutual Exclusion, and
+              Monitors
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container content-container my-5">
+      <div class="row">
+        <div class="col-lg-3 mb-4">
+          <div class="course-nav p-3 rounded">
+            <h5 class="mb-3">Table of Contents</h5>
+            <div class="nav flex-column">
+              <a class="nav-link active" href="#creating-threads"
+                ><i class="fas fa-tasks me-2"></i>Creating Threads</a
+              >
+              <a class="nav-link" href="#race-conditions"
+                ><i class="fas fa-flag-checkered me-2"></i>Race Conditions</a
+              >
+              <a class="nav-link" href="#mutual-exclusion"
+                ><i class="fas fa-shield-alt me-2"></i>Mutual Exclusion</a
+              >
+              <a class="nav-link" href="#semaphores"
+                ><i class="fas fa-traffic-light me-2"></i>Semaphores</a
+              >
+              <a class="nav-link" href="#monitors"
+                ><i class="fas fa-lock me-2"></i>Monitors</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <section id="creating-threads" class="mb-5">
+            <h2>Creating Threads in Java</h2>
+            <p>
+              Concurrency allows a program to execute multiple tasks
+              simultaneously. In Java, this is achieved using
+              <strong>threads</strong>. A thread is an independent path of
+              execution within a program. There are two primary ways to create
+              threads in Java:
+            </p>
+            <ol>
+              <li>Extending the <code>Thread</code> class.</li>
+              <li>Implementing the <code>Runnable</code> interface.</li>
+            </ol>
+
+            <h3 class="mt-4">1. Extending the <code>Thread</code> Class</h3>
+            <p>
+              To create a thread by extending the <code>Thread</code> class, you
+              must:
+            </p>
+            <ul>
+              <li>
+                Create a class that extends <code>java.lang.Thread</code>.
+              </li>
+              <li>
+                Override the <code>run()</code> method. This method contains the
+                code that will execute in parallel.
+              </li>
+              <li>
+                Create an instance of your class and call its
+                <code>start()</code> method. <strong>Important:</strong> You
+                call <code>start()</code>, not <code>run()</code>. Calling
+                <code>start()</code> tells the JVM to create a new thread and
+                execute the <code>run()</code> method within that new thread.
+              </li>
+            </ul>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>public class Parallel extends Thread {
+    private int id;
+    
+    public Parallel(int i) { 
+        id = i; 
+    }
+    
+    // The run() method defines the task for the thread
+    public void run() {
+        for (int j = 0; j < 5; j++) {
+            System.out.println("My id is " + id);
+            try {
+                // Sleep for 1000 milliseconds (1 second) to simulate work
+                // and allow context switching
+                sleep(1000); 
+            } catch (InterruptedException e) {
+                System.out.println("Thread interrupted.");
+            }
+        }
+    }
+}
+
+public class TestParallel {
+    public static void main(String[] args) {
+        Parallel[] p = new Parallel[5];
+        
+        for (int i = 0; i < 5; i++) {
+            p[i] = new Parallel(i);
+            // Start p[i].run() in a concurrent thread
+            p[i].start(); 
+        }
+        // This loop generates 5 concurrent computations.
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="mt-4">
+              2. Implementing the <code>Runnable</code> Interface
+            </h3>
+            <p>
+              Because Java only supports single inheritance (a class can only
+              extend one superclass), extending <code>Thread</code> can be
+              limiting if your class already needs to extend another class. The
+              preferred and more flexible approach is implementing the
+              <code>Runnable</code> interface.
+            </p>
+            <ul>
+              <li>
+                Create a class that implements <code>java.lang.Runnable</code>.
+              </li>
+              <li>Implement the required <code>run()</code> method.</li>
+              <li>
+                To execute it, you must explicitly create a
+                <code>Thread</code> object, passing your
+                <code>Runnable</code> instance to its constructor, and then call
+                <code>start()</code> on the <code>Thread</code> object.
+              </li>
+            </ul>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>// Implementing Runnable instead of extending Thread
+public class Parallel implements Runnable { 
+    private int id;
+    
+    public Parallel(int i) {
+        id = i;
+    }
+    
+    public void run() {
+       // Implementation of the parallel task...
+    }
+}
+
+public class TestParallelRunnable {
+    public static void main(String[] args) {
+        Parallel[] p = new Parallel[5];
+        Thread[] t = new Thread[5];
+        
+        for (int i = 0; i < 5; i++) {
+            p[i] = new Parallel(i);
+            // Explicitly create a Thread, passing the Runnable object
+            t[i] = new Thread(p[i]); 
+            // Start the thread, which calls p[i].run()
+            t[i].start(); 
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="note-box mt-3">
+              <h5>
+                <i class="fas fa-info-circle me-2"></i>Runnable as a Functional
+                Interface
+              </h5>
+              <p class="mb-0">
+                Because <code>Runnable</code> contains only one abstract method
+                (<code>run()</code>), it is considered a functional interface.
+                This means you can create threads quickly using lambda
+                expressions, eliminating the need to write an entirely separate
+                class for simple tasks.
+              </p>
+            </div>
+
+            <div class="code-block-wrapper mt-2">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>// Creating and starting a thread using a lambda expression
+Thread t = new Thread(() -&gt; {
+    System.out.println("Running in a new thread!");
+});
+t.start();</code></pre>
+            </div>
+
+            <h3 class="mt-5">Thread Execution Order and <code>join()</code></h3>
+            <p>
+              When multiple threads are started, their execution order is
+              determined by the thread scheduler and is generally unpredictable.
+              They execute asynchronously and their outputs will often be
+              interleaved.
+            </p>
+            <p>
+              If the main program (or another thread) needs to wait for a thread
+              to finish its execution before proceeding, you use the
+              <code>join()</code> method. When you call <code>t.join()</code>,
+              the current thread pauses execution and waits until thread
+              <code>t</code> has fully completed.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>// Assume PriSequence is a Thread that prints 5 numbers
+Thread th1 = new PriSequence(10); // Prints 10-15
+Thread th2 = new PriSequence(20); // Prints 20-25
+Thread th3 = new PriSequence(30); // Prints 30-35
+
+th1.start(); 
+th2.start(); 
+// th1 and th2 are now running concurrently. Their output will likely be interleaved.
+
+// The main thread will pause here until th1 and th2 finish
+th1.join(); 
+th2.join(); 
+
+// th3 will ONLY start after both th1 and th2 have fully completed.
+th3.start(); </code></pre>
+            </div>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="race-conditions" class="mb-5">
+            <h2>Maintaining Data Consistency: Race Conditions</h2>
+            <p>
+              When multiple threads operate concurrently and share data, data
+              consistency becomes a critical issue. If threads access and modify
+              shared data without proper synchronization, the final outcome
+              depends on the unpredictable timing of their execution.
+            </p>
+
+            <h3 class="mt-4">The Bank Account Problem</h3>
+            <p>
+              Consider a banking system with an array of accounts. Two common
+              operations are <code>transfer()</code> (moving money between two
+              accounts) and <code>audit()</code> (summing all balances to ensure
+              the total money in the bank remains constant).
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java
+                </div>
+                <button class="copy-button">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code>// Thread 1 executing transfer
+boolean transfer(double amount, int source, int target) {
+    if (accounts[source] < amount) {
+        return false;
+    }
+    // Step 1: Debit source
+    accounts[source] -= amount; 
+    
+    // --- Context switch could happen here! ---
+    
+    // Step 2: Credit target
+    accounts[target] += amount; 
+    return true;
+}
+
+// Thread 2 executing audit
+double audit() {
+    double balance = 0.00;
+    for (int i = 0; i < 100; i++) {
+        balance += accounts[i];
+    }
+    return balance;
+}</code></pre>
+            </div>
+
+            <p><strong>What goes wrong?</strong></p>
+            <p>
+              A <strong>Race Condition</strong> occurs when the
+              <code>audit()</code> thread reads the accounts exactly between
+              Step 1 and Step 2 of the <code>transfer()</code> thread.
+            </p>
+            <p>
+              If <code>audit()</code> runs after the source account has been
+              debited but before the target account has been credited, the total
+              calculated balance will temporarily appear to be less than the
+              actual assets (e.g., short by 500.00). The total money in the
+              system appears incorrect because the update operation wasn't
+              completed as a single, uninterrupted unit.
+            </p>
+
+            <h3 class="mt-4">Atomicity of Updates</h3>
+            <p>
+              An operation is <strong>atomic</strong> if it appears to the rest
+              of the system to occur instantaneously. Even simple statements
+              like <code>m++</code> or
+              <code>accounts[source] -= amount</code> are not atomic at the
+              machine level; they involve reading a value, modifying it, and
+              writing it back.
+            </p>
+
+            <p>
+              Consider two threads incrementing a shared variable
+              <code>n</code>:
+            </p>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="p-3 bg-dark rounded">
+                  <strong>Thread 1</strong><br />
+                  <code>m = n;</code><br />
+                  <code>m++;</code><br />
+                  <code>n = m;</code>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 bg-dark rounded">
+                  <strong>Thread 2</strong><br />
+                  <code>k = n;</code><br />
+                  <code>k++;</code><br />
+                  <code>n = k;</code>
+                </div>
+              </div>
+            </div>
+
+            <p class="mt-3">
+              If execution is interleaved as follows due to time-slicing:
+            </p>
+            <ol>
+              <li>
+                <strong>Thread 1:</strong> <code>m = n;</code> (Assume n starts
+                at 5, so m = 5)
+              </li>
+              <li>
+                <strong>Thread 1:</strong> <code>m++;</code> (m becomes 6)
+              </li>
+              <li>
+                <strong>Thread 2:</strong> <code>k = n;</code> (Thread 2 reads
+                the original n, so k = 5)
+              </li>
+              <li>
+                <strong>Thread 2:</strong> <code>k++;</code> (k becomes 6)
+              </li>
+              <li>
+                <strong>Thread 1:</strong> <code>n = m;</code> (n is set to 6)
+              </li>
+              <li>
+                <strong>Thread 2:</strong> <code>n = k;</code> (n is set to 6
+                again)
+              </li>
+            </ol>
+            <p>
+              We expected <code>n</code> to increase by 2 (becoming 7), but it
+              only increased by 1 because Thread 2 overwrote Thread 1's work.
+            </p>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="mutual-exclusion" class="mb-5">
+            <h2>Solving Race Conditions: Mutual Exclusion</h2>
+            <p>
+              To prevent race conditions, sections of code that access shared,
+              modifiable data must be protected. These areas are called
+              <strong>Critical Sections</strong>.
+            </p>
+            <p>
+              We need a mechanism to ensure that if one thread is executing
+              inside a critical section, no other thread can enter that same
+              critical section. This concept is known as
+              <strong>Mutual Exclusion</strong>.
+            </p>
+
+            <h3 class="mt-4">Early Attempts at Software Locks</h3>
+            <p>
+              Programmers tried building locks using shared variables, but these
+              attempts often had flaws.
+            </p>
+
+            <h4 class="mt-3">
+              Attempt 1: Strict Alternation (One Shared Variable)
+            </h4>
+            <p>
+              Using a single <code>turn</code> variable to dictate which thread
+              can run.
+            </p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java (Pseudocode)
+                </div>
+              </div>
+              <pre><code>// Thread 1
+while (turn != 1) { /* Busy wait */ }
+// Enter critical section
+turn = 2; // Pass turn to Thread 2</code></pre>
+            </div>
+            <p>
+              <strong>Problem: Starvation.</strong> If Thread 1 finishes its
+              turn, it cannot re-enter the critical section until Thread 2 takes
+              a turn, even if Thread 2 doesn't need to enter the section. Thread
+              1 is starved.
+            </p>
+
+            <h4 class="mt-3">
+              Attempt 2: Checking Intent (Two Shared Variables)
+            </h4>
+            <p>Using flags to indicate a thread wants to enter.</p>
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java (Pseudocode)
+                </div>
+              </div>
+              <pre><code>// Thread 1
+request_1 = true;
+while (request_2) { /* Busy wait */ }
+// Enter critical section
+request_1 = false;</code></pre>
+            </div>
+            <p>
+              <strong>Problem: Deadlock.</strong> If both threads set their
+              request flags to <code>true</code> simultaneously, they will both
+              get stuck in their <code>while</code> loops waiting for the other
+              to finish. Neither can proceed.
+            </p>
+
+            <h3 class="mt-4">Peterson's Algorithm</h3>
+            <p>
+              Peterson's algorithm is a classic software solution that
+              successfully combines the ideas of intent and turns to guarantee
+              mutual exclusion for two threads without starvation or deadlock.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Java (Pseudocode)
+                </div>
+              </div>
+              <pre><code>// Thread 1
+request_1 = true; // Indicate intent
+turn = 2;         // Be polite, offer turn to the other thread
+
+// Wait only if the other thread wants in AND it's their turn
+while (request_2 && turn == 2) {
+    // "Busy" wait
+}
+
+// --- Enter critical section ---
+
+// --- Leave critical section ---
+request_1 = false; // I'm done</code></pre>
+            </div>
+            <p>
+              While Peterson's algorithm works, generalizing it for more than
+              two processes is complex (e.g., Lamport's Bakery Algorithm).
+              Furthermore, software solutions rely on "busy waiting" (spinning
+              in a loop), which wastes CPU cycles.
+            </p>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="semaphores" class="mb-5">
+            <h2>Dijkstra's Semaphores</h2>
+            <p>
+              To provide a robust, low-level mechanism for synchronization,
+              Edsger W. Dijkstra introduced <strong>Semaphores</strong>. A
+              semaphore is an integer variable accessed only through two
+              special, guaranteed <strong>atomic</strong> operations. These
+              operations are often implemented with hardware support (like a
+              "test-and-set" instruction).
+            </p>
+
+            <h3 class="mt-4">The Two Atomic Operations</h3>
+            <p>A semaphore <code>S</code> supports:</p>
+            <ol>
+              <li>
+                <strong><code>P(S)</code> (Wait/Acquire):</strong> From Dutch
+                <em>passeren</em> (to pass). Used to request access.
+                <div class="p-3 bg-dark rounded mt-2">
+                  <code
+                    >if (S > 0) { decrement S; } else { block thread and wait
+                    for S to become positive; }</code
+                  >
+                </div>
+              </li>
+              <li class="mt-3">
+                <strong><code>V(S)</code> (Signal/Release):</strong> From Dutch
+                <em>vrygeven</em> (to release). Used to release access.
+                <div class="p-3 bg-dark rounded mt-2">
+                  <code
+                    >if (threads are waiting) { wake one of them up; } else {
+                    increment S; }</code
+                  >
+                </div>
+              </li>
+            </ol>
+
+            <h3 class="mt-4">Mutual Exclusion using Semaphores</h3>
+            <p>
+              To protect a critical section, you initialize a semaphore to 1
+              (often called a Mutex - Mutual Exclusion object).
+            </p>
+
+            <div class="row text-center">
+              <div class="col-md-6">
+                <div class="p-3 border border-secondary rounded mb-3">
+                  <h5 class="text-accent-primary">Thread 1</h5>
+                  <p>
+                    <code>P(S);</code><br />
+                    <em>// Enter critical section</em><br />
+                    <em>// Leave critical section</em><br />
+                    <code>V(S);</code>
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 border border-secondary rounded mb-3">
+                  <h5 class="text-accent-primary">Thread 2</h5>
+                  <p>
+                    <code>P(S);</code><br />
+                    <em>// Enter critical section</em><br />
+                    <em>// Leave critical section</em><br />
+                    <code>V(S);</code>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p>
+              Semaphores are powerful because they guarantee mutual exclusion,
+              freedom from starvation, and freedom from deadlock when used
+              correctly.
+            </p>
+
+            <h3 class="mt-4">Problems with Semaphores</h3>
+            <p>
+              While effective, semaphores are considered low-level and prone to
+              programming errors:
+            </p>
+            <ul>
+              <li>
+                There is no explicit connection in the code between the
+                semaphore variable and the specific data or critical section it
+                protects.
+              </li>
+              <li>
+                It relies entirely on developer discipline. A developer might
+                write a <code>P(S)</code> but forget the matching
+                <code>V(S)</code>, causing the system to halt permanently.
+              </li>
+              <li>
+                A developer might accidentally execute <code>V(S)</code> without
+                having done <code>P(S)</code>, corrupting the synchronization
+                state.
+              </li>
+            </ul>
+          </section>
+
+          <hr class="my-5 border-color" />
+
+          <section id="monitors" class="mb-5">
+            <h2>Monitors: High-Level Synchronization</h2>
+            <p>
+              Because semaphores are error-prone, higher-level abstractions were
+              developed. A <strong>Monitor</strong> (introduced by Per Brinch
+              Hansen and C.A.R. Hoare) is a language-level construct that
+              attaches synchronization control directly to the data being
+              protected.
+            </p>
+
+            <h3 class="mt-4">The Concept of a Monitor</h3>
+            <p>
+              You can think of a monitor as an object-oriented class that
+              enforces mutual exclusion implicitly.
+            </p>
+            <ul>
+              <li>
+                It contains private data definition (the shared resources).
+              </li>
+              <li>
+                It contains a collection of functions operating on that data.
+              </li>
+              <li>
+                <strong>The Guarantee:</strong> Only one thread can be active
+                inside any of the monitor's functions at a time. The mutual
+                exclusion is handled automatically by the programming language
+                runtime, not by manual lock management.
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Pseudocode Example of a Monitor</h3>
+            <p>
+              If we applied the monitor concept to our banking problem, we
+              wouldn't need to write P() and V() operations around the transfer
+              code. By simply declaring it inside a <code>monitor</code>, the
+              environment ensures thread safety.
+            </p>
+
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <div class="code-language">
+                  <i class="fab fa-java"></i> Pseudocode
+                </div>
+              </div>
+              <pre><code>monitor bank_account {
+    double accounts[100]; // Protected data
+
+    // These methods are implicitly mutually exclusive.
+    // If Thread A is in transfer(), Thread B must wait to enter transfer() or audit().
+    
+    boolean transfer(double amount, int source, int target) {
+        if (accounts[source] < amount) { return false; }
+        accounts[source] -= amount;
+        accounts[target] += amount;
+        return true;
+    }
+
+    double audit() {
+        double balance = 0.00;
+        for (int i = 0; i < 100; i++) {
+            balance += accounts[i];
+        }
+        return balance;
+    }
+}</code></pre>
+            </div>
+
+            <p class="mt-3">
+              <em
+                >Note: The <code>monitor</code> keyword shown above is
+                pseudocode to illustrate the concept. In actual Java, this
+                high-level synchronization is implemented using the
+                <code>synchronized</code> keyword applied to methods or code
+                blocks within a class.</em
+              >
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container content-container">
+        <div class="row">
+          <div class="col-lg-8 mb-4">
+            <h5>Programming Concepts Using Java</h5>
+            <p>
+              An online companion for the Java programming course at IIT Madras
+              BS Degree program.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4">
+            <h5>Quick Links</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="../index.html"><i class="fas fa-home me-2"></i>Home</a>
+              </li>
+              <li>
+                <a href="../week-9/summary.html"
+                  ><i class="fas fa-backward me-2"></i>Week 9</a
+                >
+              </li>
+              <li>
+                <a href="../week-11/summary.html"
+                  ><i class="fas fa-forward me-2"></i>Week 11</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="text-center">
+          <p class="mb-0">
+            &copy; 2026 IIT Madras BS Degree Program. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/codeblocks.js"></script>
+  </body>
+</html>
